@@ -5,8 +5,8 @@ import fr.moviedb.utils.JPAUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 
-public abstract class VilleRepository {
-   private EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
+public class VilleRepository {
+    private EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
     private EntityTransaction transaction = em.getTransaction();
 
     public Ville findVilleByName(String nom) {
@@ -21,7 +21,7 @@ public abstract class VilleRepository {
         Ville ville = new Ville(nom);
         EntityTransaction transaction = em.getTransaction();
         transaction.begin();
-        em.persist(nom);
+        em.persist(ville);
         transaction.commit();
         return ville;
     }
