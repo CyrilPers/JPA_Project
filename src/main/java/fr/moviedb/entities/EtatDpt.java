@@ -1,45 +1,27 @@
-package fr.moviedb;
+package fr.moviedb.entities;
 
 import jakarta.persistence.*;
-
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 @Entity
 @Table(name = "etat_dpt")
 public class EtatDpt {
     @Id
-    @Column(name = "code_insee", nullable = false, length = 50)
-    private String codeInsee;
+    @Column(name = "etat_dpt", nullable = false, length = 50)
+    private String nom;
 
-    @Column(name = "libelle", length = 50)
-    private String libelle;
-
-    @OneToMany(mappedBy = "codeInsee1")
-    private Set<Lieu> lieus = new LinkedHashSet<>();
-
-    public String getCodeInsee() {
-        return codeInsee;
+    public EtatDpt(String etatDpt) {
+        this.nom = etatDpt;
     }
 
-    public void setCodeInsee(String codeInsee) {
-        this.codeInsee = codeInsee;
+    public EtatDpt() {
+
     }
 
-    public String getLibelle() {
-        return libelle;
+    public void setNom(String nom) {
+        this.nom = nom;
     }
-
-    public void setLibelle(String libelle) {
-        this.libelle = libelle;
-    }
-
-    public Set<Lieu> getLieus() {
-        return lieus;
-    }
-
-    public void setLieus(Set<Lieu> lieus) {
-        this.lieus = lieus;
+    public String getNom() {
+        return nom;
     }
 
 }

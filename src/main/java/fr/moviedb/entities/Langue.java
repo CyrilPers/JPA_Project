@@ -1,7 +1,8 @@
-package fr.moviedb;
+package fr.moviedb.entities;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -10,13 +11,21 @@ import java.util.Set;
 public class Langue {
     @Id
     @Column(name = "id_langue", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "libelle", nullable = false, length = 50)
     private String libelle;
 
-    @OneToMany(mappedBy = "idLangue")
-    private Set<Film> films = new LinkedHashSet<>();
+    @OneToMany(mappedBy = "langue")
+    private Set<Film> films = new HashSet<>();
+
+
+    public Langue(String libelle) {
+        this.libelle = libelle;
+    }
+
+    public Langue() { }
 
     public Integer getId() {
         return id;

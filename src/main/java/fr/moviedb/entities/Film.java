@@ -1,9 +1,9 @@
-package fr.moviedb;
+package fr.moviedb.entities;
 
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
-import java.util.LinkedHashSet;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -17,7 +17,7 @@ public class Film {
     private String nom;
 
     @Column(name = "`année`")
-    private Integer année;
+    private Integer annee;
 
     @Column(name = "rating", precision = 2, scale = 1)
     private BigDecimal rating;
@@ -29,22 +29,53 @@ public class Film {
     private String resume;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id_personne", nullable = false)
-    private Realisateur idPersonne;
+    @JoinColumn(name = "pays", nullable = false)
+    private Pays pays;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_lieu", nullable = false)
-    private Lieu idLieu;
+    private Lieu lieu;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_langue", nullable = false)
-    private Langue idLangue;
+    private Langue langue;
 
-    @OneToMany(mappedBy = "idFilm")
-    private Set<AJoue> aJoues = new LinkedHashSet<>();
+    @OneToMany(mappedBy = "film")
+    private Set<AJoue> aJoues = new HashSet<>();
 
     @ManyToMany(mappedBy = "idFilm")
-    private Set<Genre> genres = new LinkedHashSet<>();
+    private Set<Genre> genres = new HashSet<>();
+
+    @ManyToMany(mappedBy = "idFilm")
+    private Set<Realisateur> realisateurs = new HashSet<>();
+
+    public Film() {
+    }
+
+
+    public Set<AJoue> getaJoues() {
+        return aJoues;
+    }
+
+    public void setaJoues(Set<AJoue> aJoues) {
+        this.aJoues = aJoues;
+    }
+
+    public Set<Realisateur> getRealisateurs() {
+        return realisateurs;
+    }
+
+    public void setRealisateurs(Set<Realisateur> realisateurs) {
+        this.realisateurs = realisateurs;
+    }
+
+    public Pays getPays() {
+        return pays;
+    }
+
+    public void setPays(Pays pays) {
+        this.pays = pays;
+    }
 
     public String getIdFilm() {
         return idFilm;
@@ -62,12 +93,12 @@ public class Film {
         this.nom = nom;
     }
 
-    public Integer getAnnée() {
-        return année;
+    public Integer getAnnee() {
+        return annee;
     }
 
-    public void setAnnée(Integer année) {
-        this.année = année;
+    public void setAnnee(Integer annee) {
+        this.annee = annee;
     }
 
     public BigDecimal getRating() {
@@ -94,36 +125,20 @@ public class Film {
         this.resume = resume;
     }
 
-    public Realisateur getIdPersonne() {
-        return idPersonne;
+    public Lieu getLieu() {
+        return lieu;
     }
 
-    public void setIdPersonne(Realisateur idPersonne) {
-        this.idPersonne = idPersonne;
+    public void setLieu(Lieu lieu) {
+        this.lieu = lieu;
     }
 
-    public Lieu getIdLieu() {
-        return idLieu;
+    public Langue getLangue() {
+        return langue;
     }
 
-    public void setIdLieu(Lieu idLieu) {
-        this.idLieu = idLieu;
-    }
-
-    public Langue getIdLangue() {
-        return idLangue;
-    }
-
-    public void setIdLangue(Langue idLangue) {
-        this.idLangue = idLangue;
-    }
-
-    public Set<AJoue> getAJoues() {
-        return aJoues;
-    }
-
-    public void setAJoues(Set<AJoue> aJoues) {
-        this.aJoues = aJoues;
+    public void setLangue(Langue langue) {
+        this.langue = langue;
     }
 
     public Set<Genre> getGenres() {

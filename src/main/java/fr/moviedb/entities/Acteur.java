@@ -1,9 +1,9 @@
-package fr.moviedb;
+package fr.moviedb.entities;
 
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
-import java.util.LinkedHashSet;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -13,8 +13,8 @@ public class Acteur extends Personne{
     @Column(name = "taille", precision = 4, scale = 2)
     private BigDecimal taille;
 
-    @OneToMany(mappedBy = "idPersonne")
-    private Set<AJoue> aJoues = new LinkedHashSet<>();
+    @OneToMany(mappedBy = "acteur")
+    private Set<AJoue> aJoues = new HashSet<>();
 
     public BigDecimal getTaille() {
         return taille;

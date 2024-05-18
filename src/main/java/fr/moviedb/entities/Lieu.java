@@ -1,34 +1,35 @@
-package fr.moviedb;
-
+package fr.moviedb.entities;
 import jakarta.persistence.*;
-
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 @Entity
 @Table(name = "lieu")
 public class Lieu {
     @Id
     @Column(name = "id_lieu", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "code_insee", nullable = false)
-    private Ville codeInsee;
+    @JoinColumn(name = "ville", nullable = false)
+    private Ville ville;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "code_insee_1", nullable = false)
-    private EtatDpt codeInsee1;
+    @JoinColumn(name = "etat_dpt", nullable = false)
+    private EtatDpt etatDpt;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "code_insee_2", nullable = false)
-    private Pay codeInsee2;
+    @JoinColumn(name = "pays", nullable = false)
+    private Pays pays;
 
-    @OneToMany(mappedBy = "idLieu")
-    private Set<Film> films = new LinkedHashSet<>();
+    public Lieu(Integer id, Ville ville, EtatDpt etatDpt, Pays pays) {
+        this.ville = ville;
+        this.etatDpt = etatDpt;
+        this.pays = pays;
+    }
 
-    @OneToMany(mappedBy = "idLieu")
-    private Set<Personne> personnes = new LinkedHashSet<>();
+    public Lieu() {
+
+    }
 
     public Integer getId() {
         return id;
@@ -38,44 +39,28 @@ public class Lieu {
         this.id = id;
     }
 
-    public Ville getCodeInsee() {
-        return codeInsee;
+    public Ville getVille() {
+        return ville;
     }
 
-    public void setCodeInsee(Ville codeInsee) {
-        this.codeInsee = codeInsee;
+    public void setVille(Ville ville) {
+        this.ville = ville;
     }
 
-    public EtatDpt getCodeInsee1() {
-        return codeInsee1;
+    public EtatDpt getEtatDpt() {
+        return etatDpt;
     }
 
-    public void setCodeInsee1(EtatDpt codeInsee1) {
-        this.codeInsee1 = codeInsee1;
+    public void setEtatDpt(EtatDpt etatDpt) {
+        this.etatDpt = etatDpt;
     }
 
-    public Pay getCodeInsee2() {
-        return codeInsee2;
+    public Pays getPays() {
+        return pays;
     }
 
-    public void setCodeInsee2(Pay codeInsee2) {
-        this.codeInsee2 = codeInsee2;
-    }
-
-    public Set<Film> getFilms() {
-        return films;
-    }
-
-    public void setFilms(Set<Film> films) {
-        this.films = films;
-    }
-
-    public Set<Personne> getPersonnes() {
-        return personnes;
-    }
-
-    public void setPersonnes(Set<Personne> personnes) {
-        this.personnes = personnes;
+    public void setPays(Pays pays) {
+        this.pays = pays;
     }
 
 }

@@ -1,4 +1,4 @@
-package fr.moviedb;
+package fr.moviedb.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;

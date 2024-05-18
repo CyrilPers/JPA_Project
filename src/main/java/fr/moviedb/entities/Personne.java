@@ -1,4 +1,4 @@
-package fr.moviedb;
+package fr.moviedb.entities;
 
 import jakarta.persistence.*;
 
@@ -26,7 +26,7 @@ public abstract class Personne {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_lieu", nullable = false)
-    private Lieu idLieu;
+    private Lieu lieu;
 
     @OneToOne(mappedBy = "idPersonne")
     private Acteur acteur;
@@ -74,12 +74,12 @@ public abstract class Personne {
         this.url = url;
     }
 
-    public Lieu getIdLieu() {
-        return idLieu;
+    public Lieu getLieu() {
+        return lieu;
     }
 
-    public void setIdLieu(Lieu idLieu) {
-        this.idLieu = idLieu;
+    public void setLieu(Lieu lieu) {
+        this.lieu = lieu;
     }
 
     public Acteur getActeur() {

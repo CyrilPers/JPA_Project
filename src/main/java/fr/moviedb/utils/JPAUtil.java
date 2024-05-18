@@ -1,4 +1,4 @@
-package fr.moviedb;
+package fr.moviedb.utils;
 
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
@@ -8,7 +8,7 @@ public class JPAUtil {
 
     static {
         try {
-            entityManagerFactory = Persistence.createEntityManagerFactory("YourPersistenceUnitName");
+            entityManagerFactory = Persistence.createEntityManagerFactory("movie_db");
         } catch (Throwable ex) {
             throw new ExceptionInInitializerError(ex);
         }

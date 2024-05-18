@@ -1,4 +1,4 @@
-package fr.moviedb;
+package fr.moviedb.entities;
 
 import jakarta.persistence.*;
 
@@ -11,18 +11,24 @@ public class AJoue {
     @MapsId("idFilm")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_film", nullable = false)
-    private Film idFilm;
+    private Film film;
 
     @MapsId("idPersonne")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_personne", nullable = false)
-    private Acteur idPersonne;
+    private Acteur acteur;
 
     @Column(name = "personnage", length = 50)
     private String personnage;
 
-    @Column(name = "castingPrincipal", nullable = false)
-    private Boolean castingPrincipal = false;
+    public AJoue(Acteur acteur, Film film) {
+        this.acteur = acteur;
+        this.film = film;
+    }
+
+    public AJoue() {
+
+    }
 
     public AJoueId getId() {
         return id;
@@ -32,20 +38,20 @@ public class AJoue {
         this.id = id;
     }
 
-    public Film getIdFilm() {
-        return idFilm;
+    public Film getFilm() {
+        return film;
     }
 
-    public void setIdFilm(Film idFilm) {
-        this.idFilm = idFilm;
+    public void setFilm(Film film) {
+        this.film = film;
     }
 
-    public Acteur getIdPersonne() {
-        return idPersonne;
+    public Acteur getActeur() {
+        return acteur;
     }
 
-    public void setIdPersonne(Acteur idPersonne) {
-        this.idPersonne = idPersonne;
+    public void setActeur(Acteur acteur) {
+        this.acteur = acteur;
     }
 
     public String getPersonnage() {
@@ -54,14 +60,6 @@ public class AJoue {
 
     public void setPersonnage(String personnage) {
         this.personnage = personnage;
-    }
-
-    public Boolean getCastingPrincipal() {
-        return castingPrincipal;
-    }
-
-    public void setCastingPrincipal(Boolean castingPrincipal) {
-        this.castingPrincipal = castingPrincipal;
     }
 
 }
