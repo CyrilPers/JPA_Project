@@ -14,6 +14,10 @@ public class LieuService {
     }
 
     public Lieu add(Lieu lieu) {
+        Lieu lieuFound = lieuRepository.find(lieu.getId());
+        if (lieuFound != null) {
+            return lieuFound;
+        }
         return lieuRepository.save(lieu);
     }
 }

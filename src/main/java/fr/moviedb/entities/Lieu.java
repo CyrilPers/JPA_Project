@@ -1,41 +1,43 @@
 package fr.moviedb.entities;
+
 import jakarta.persistence.*;
+
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "lieu")
 public class Lieu {
-    @Id
-    @Column(name = "id_lieu", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @EmbeddedId
+    private LieuId id;
 
+    @MapsId("ville")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "ville", nullable = false)
     private Ville ville;
 
+    @MapsId("etatDpt")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "etat_dpt", nullable = false)
     private EtatDpt etatDpt;
 
+    @MapsId("pays")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "pays", nullable = false)
     private Pays pays;
 
-    public Lieu(Integer id, Ville ville, EtatDpt etatDpt, Pays pays) {
-        this.ville = ville;
-        this.etatDpt = etatDpt;
-        this.pays = pays;
-    }
+    @OneToMany(mappedBy = "lieu")
+    private Set<Film> films = new LinkedHashSet<>();
 
-    public Lieu() {
+    @OneToMany(mappedBy = "lieu")
+    private Set<Personne> personnes = new LinkedHashSet<>();
 
-    }
 
-    public Integer getId() {
+    public LieuId getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(LieuId id) {
         this.id = id;
     }
 
@@ -61,6 +63,22 @@ public class Lieu {
 
     public void setPays(Pays pays) {
         this.pays = pays;
+    }
+
+    public Set<Film> getFilms() {
+        return films;
+    }
+
+    public void setFilms(Set<Film> films) {
+        this.films = films;
+    }
+
+    public Set<Personne> getPersonnes() {
+        return personnes;
+    }
+
+    public void setPersonnes(Set<Personne> personnes) {
+        this.personnes = personnes;
     }
 
 }
