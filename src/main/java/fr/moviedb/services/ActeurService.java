@@ -21,5 +21,8 @@ public class ActeurService {
         return acteurRepository.findByMovie(movieName);
     }
 
+    public Set<Acteur> findSameActorsInMovies(String movieName1, String movieName2) {
+        return acteurRepository.findSameActorsInMovies(movieName1, movieName2);
+    }
 
 }

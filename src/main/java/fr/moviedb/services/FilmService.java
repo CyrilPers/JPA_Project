@@ -28,6 +28,4 @@ public class FilmService {
     public Set<Film> findByActor(String actorName) {
         return filmRepository.findByActor(actorName);
     }
-
-
-}
+    }

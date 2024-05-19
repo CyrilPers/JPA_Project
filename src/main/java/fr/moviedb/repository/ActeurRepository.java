@@ -43,4 +43,18 @@ public class ActeurRepository {
                 .setParameter("nom", movieName)
                 .getResultList();
     }
+
+    public Set<Acteur> findSameActorsInMovies(String movieName1, String movieName2) {
+            return (Set<Acteur>) em.createQuery(
+                    "SELECT a FROM Acteur a " +
+                            "JOIN AJoue aj ON aj.acteur = a.idPersonne " +
+                            "JOIN Film f1 ON aj.film = f1.idFilm " +
+                            "JOIN AJoue aj2 ON aj2.acteur = a.idPersonne " +
+                            "JOIN Film f2 ON aj2.film = f2.idFilm " +
+                            "WHERE f1.nom LIKE :movieName1 AND f2.nom LIKE :movieName2", Acteur.class)
+                    .setParameter("movieName1", movieName1)
+                    .setParameter("movieName2", movieName2)
+                    .getResultList();
+        }
+    }
 }
