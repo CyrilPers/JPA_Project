@@ -30,17 +30,17 @@ public class ActeurRepository {
         return acteur;
     }
 
+    /**
+     * @param movieName
+     * @return
+     */
     public Set<Acteur> findByMovie(String movieName) {
         return (Set<Acteur>) em.createQuery(
                         "SELECT a FROM Acteur a " +
-                                "JOIN a_joue aj ON a.id = aj.id_personne " +
-                                "JOIN Film f ON aj1.id_film = a1.id_personne " +
-                                "WHERE f.nom LIKE :nom")
+                                "JOIN AJoue aj ON aj.acteur = a.idPersonne " +
+                                "JOIN Film f ON f.idFilm = aj.film " +
+                                "WHERE f.nom LIKE :nom", Acteur.class)
                 .setParameter("nom", movieName)
                 .getResultList();
     }
-
-
-
-
 }

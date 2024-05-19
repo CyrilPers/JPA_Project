@@ -1,9 +1,7 @@
 package fr.moviedb.services;
 
 import fr.moviedb.entities.Acteur;
-import fr.moviedb.entities.Film;
 import fr.moviedb.repository.ActeurRepository;
-import org.hibernate.service.spi.InjectService;
 
 import java.util.Set;
 

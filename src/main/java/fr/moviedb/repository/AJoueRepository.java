@@ -42,7 +42,9 @@ public class AJoueRepository {
      * @return
      */
     public AJoue findAjoueByFilmAndActeur(String acteurId, String idFilm) {
-        return em.createQuery("SELECT aj FROM AJoue aj WHERE aj.film = :idFilm AND aj.acteur = :idPersonne", AJoue.class)
+        return em.createQuery("SELECT aj FROM AJoue aj " +
+                        "WHERE aj.film = :idFilm " +
+                        "AND aj.acteur = :idPersonne", AJoue.class)
                 .setParameter("idFilm", idFilm)
                 .setParameter("idPersonne", acteurId)
                 .getSingleResult();
