@@ -15,12 +15,7 @@ public class GenreRepository {
                 .getSingleResult();
     }
 
-    public Genre save(String nom) {
-        Genre genreFound = findGenreByName(nom);
-        if (genreFound != null) {
-            return genreFound;
-        }
-        Genre genre = new Genre(nom);
+    public Genre save(Genre genre) {
         EntityTransaction transaction = em.getTransaction();
         transaction.begin();
         em.persist(genre);

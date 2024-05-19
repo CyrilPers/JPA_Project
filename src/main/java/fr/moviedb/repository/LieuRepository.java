@@ -9,9 +9,6 @@ public class LieuRepository {
     private EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
     private EntityTransaction transaction = em.getTransaction();
 
-    public Lieu find(Lieu lieu) {
-        return em.find(Lieu.class, lieu.getId());
-    }
 
     public Lieu findById(int id) {
         return em.find(Lieu.class, id);

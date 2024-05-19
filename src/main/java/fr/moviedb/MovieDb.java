@@ -1,15 +1,15 @@
 package fr.moviedb;
 
-import fr.moviedb.services.ManageFile;
+import fr.moviedb.fileManagement.ManageFile;
 import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
 
 public class MovieDb {
-    public static void main(String[] args) {
-        ManageFile manageFile = new ManageFile();
+    public static void main(String[] args)  {
         try {
-            manageFile.parseToDb();
+            ManageFile mf = new ManageFile();
+            mf.parseToDb();
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (ParseException e) {

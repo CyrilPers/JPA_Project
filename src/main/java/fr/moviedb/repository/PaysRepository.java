@@ -18,13 +18,7 @@ public class PaysRepository {
         return em.find(Pays.class, nom);
     }
 
-
-    public Pays save(String nom) {
-        Pays paysFound = findPaysByName(nom);
-        if (paysFound != null) {
-            return paysFound;
-        }
-        Pays pays = new Pays(nom);
+    public Pays save(Pays pays) {
         EntityTransaction transaction = em.getTransaction();
         transaction.begin();
         em.persist(pays);

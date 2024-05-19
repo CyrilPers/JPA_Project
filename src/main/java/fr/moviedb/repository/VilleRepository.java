@@ -13,12 +13,7 @@ public class VilleRepository {
         return em.find(Ville.class, nom);
     }
 
-    public Ville save(String nom) {
-        Ville villeFound = findVilleByName(nom);
-        if (villeFound != null) {
-            return villeFound;
-        }
-        Ville ville = new Ville(nom);
+    public Ville save(Ville ville) {
         EntityTransaction transaction = em.getTransaction();
         transaction.begin();
         em.persist(ville);

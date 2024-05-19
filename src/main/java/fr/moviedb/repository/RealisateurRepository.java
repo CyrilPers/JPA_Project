@@ -14,7 +14,7 @@ public class RealisateurRepository {
         return em.find(Realisateur.class, realisateur.getIdPersonne());
     }
 
-    public Realisateur findById(int id) {
+    public Realisateur findById(String id) {
         return em.find(Realisateur.class, id);
     }
 

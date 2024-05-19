@@ -8,11 +8,15 @@ public class VilleService {
 
 
     public VilleService(VilleRepository villeRepository) {
-
         this.villeRepository = villeRepository;
     }
 
-    public Ville save(String nom) {
-        return villeRepository.save(nom);
+    public Ville add(String nom) {
+        Ville villeFound = villeRepository.findVilleByName(nom);
+        if (villeFound != null) {
+            return villeFound;
+        }
+        Ville ville = new Ville(nom);
+        return villeRepository.save(ville);
     }
 }

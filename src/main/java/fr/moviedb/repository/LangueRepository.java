@@ -16,12 +16,7 @@ public class LangueRepository {
                 .getSingleResult();
     }
 
-    public Langue save(String libelle) {
-        Langue langueFound = findLangueByName(libelle);
-        if (langueFound != null) {
-            return langueFound;
-        }
-        Langue langue = new Langue(libelle);
+    public Langue save(Langue langue) {
         EntityTransaction transaction = em.getTransaction();
         transaction.begin();
         em.persist(langue);

@@ -13,12 +13,7 @@ public class EtatDptRepository {
         return em.find(EtatDpt.class, nom);
     }
 
-    public EtatDpt save(String nom) {
-        EtatDpt etatDptFound = findEtatDptByName(nom);
-        if (etatDptFound != null) {
-            return etatDptFound;
-        }
-        EtatDpt etatDpt = new EtatDpt(nom);
+    public EtatDpt save(EtatDpt etatDpt) {
         EntityTransaction transaction = em.getTransaction();
         transaction.begin();
         em.persist(etatDpt);

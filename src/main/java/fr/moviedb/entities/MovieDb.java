@@ -1,6 +1,6 @@
 package fr.moviedb.entities;
 
-import fr.moviedb.services.ManageFile;
+import fr.moviedb.fileManagement.ManageFile;
 import org.json.simple.parser.ParseException;
 
 import java.io.IOException;

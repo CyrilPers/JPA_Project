@@ -9,14 +9,26 @@ public class AJoueRepository {
     private EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
     private EntityTransaction transaction = em.getTransaction();
 
+    /**
+     * @param aJoue
+     * @return
+     */
     public AJoue find(AJoue aJoue) {
         return em.find(AJoue.class, aJoue.getId());
     }
 
+    /**
+     * @param id
+     * @return
+     */
     public AJoue findById(int id) {
         return em.find(AJoue.class, id);
     }
 
+    /**
+     * @param aJoue
+     * @return
+     */
     public AJoue save(AJoue aJoue) {
         EntityTransaction transaction = em.getTransaction();
         transaction.begin();
@@ -25,8 +37,13 @@ public class AJoueRepository {
         return aJoue;
     }
 
+    /**
+     * @param acteurId
+     * @param idFilm
+     * @return
+     */
     public AJoue findAjoueByFilmAndActeur(String acteurId, String idFilm) {
-        return em.createQuery("SELECT aj FROM AJoue aj WHERE aj.id_film = :idFilm AND aj.id_personne = :idPersonne", AJoue.class)
+        return em.createQuery("SELECT aj FROM AJoue aj WHERE aj.film = :idFilm AND aj.acteur = :idPersonne", AJoue.class)
                 .setParameter("idFilm", idFilm)
                 .setParameter("idPersonne", acteurId)
                 .getSingleResult();

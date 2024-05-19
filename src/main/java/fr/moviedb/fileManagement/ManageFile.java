@@ -1,7 +1,7 @@
-package fr.moviedb.services;
+package fr.moviedb.fileManagement;
 
 import fr.moviedb.entities.*;
-import fr.moviedb.repository.*;
+import fr.moviedb.services.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -16,11 +16,21 @@ import java.util.Iterator;
 import java.util.Set;
 
 
-public class ManageFile {
-    private VilleService villeService;
 
+public class ManageFile {
+
+    private VilleService villeService;
+    private PaysService paysService;
+    private AJoueService aJoueService;
+    private ActeurService acteurService;
+    private RealisateurService realisateurService;
+    private LangueService langueService;
+    private EtatDptService etatDptService;
+    private LieuService lieuService;
+    private GenreService genreService;
 
     public void parseToDb() throws IOException, ParseException {
+
         String filePath = "src/main/resources/files/films.json";
         JSONParser parser = new JSONParser();
         Object object = parser.parse(new FileReader(filePath));
@@ -58,7 +68,7 @@ public class ManageFile {
                 film.setResume(jFilm.get("plot").toString());
             }
             if (jFilm.containsKey("pays")) {
-                Pays pays = paysRepository.save(jFilm.get("Pays").toString());
+                Pays pays = paysService.add(jFilm.get("Pays").toString());
                 film.setPays(pays);
             }
             if (jFilm.containsKey("realisateurs")) {
@@ -80,11 +90,16 @@ public class ManageFile {
                 JSONArray roles = (JSONArray) jFilm.get("roles");
                 if (!roles.isEmpty())
                     addRoleToAJoue(roles, film);
+
             }
 
         }
     }
 
+    /**
+     * @param roles
+     * @param film
+     */
     private void addRoleToAJoue(JSONArray roles, Film film) {
         Iterator<JSONObject> iterator = roles.iterator();
         while (iterator.hasNext()) {
@@ -101,32 +116,41 @@ public class ManageFile {
                 charactereName = jRole.get("charactereName").toString();
             }
             if (acteurId != null) {
-                AJoue aJoueFound = ajoueRepository.findAjoueByFilmAndActeur(acteurId, film.getIdFilm());
+                AJoue aJoueFound = aJoueService.findAjoueByFilmAndActeur(acteurId, film.getIdFilm());
                 if (aJoueFound != null && charactereName != null) {
                     aJoueFound.setPersonnage(charactereName);
-                    ajoueRepository.save(aJoueFound);
+                    aJoueService.add(aJoueFound);
                 }
             }
         }
     }
 
+    /**
+     * @param acteursList
+     * @param film
+     * @return
+     */
     private AJoue addActingPeople(Set<Acteur> acteursList, Film film) {
         Set<AJoue> ajoueList = new HashSet<>();
         acteursList.forEach(acteur -> {
             AJoue ajoue = new AJoue(acteur, film);
-            ajoueRepository.save(ajoue);
+            aJoueService.add(ajoue);
             ajoueList.add(ajoue);
         });
         return (AJoue) ajoueList;
     }
 
+    /**
+     * @param castingPrincipal
+     * @return
+     */
     private Set<Acteur> convertActeurs(JSONArray castingPrincipal) {
         Iterator<JSONObject> iterator = castingPrincipal.iterator();
         Set<Acteur> acteurList = new HashSet<>();
         while (iterator.hasNext()) {
             JSONObject jActeur = iterator.next();
             if (jActeur.containsKey("id")) {
-                Acteur acteurFound = acteurRepository.findById((Integer) jActeur.get("id"));
+                Acteur acteurFound = acteurService.findById(jActeur.get("id").toString());
                 if (acteurFound != null) {
                     acteurList.add(acteurFound);
                 } else {
@@ -153,7 +177,7 @@ public class ManageFile {
                         }
 
                     }
-                    acteurRepository.save(acteur);
+                    acteurService.add(acteur);
                     acteurList.add(acteur);
                 }
             }
@@ -161,13 +185,17 @@ public class ManageFile {
         return acteurList;
     }
 
+    /**
+     * @param realisateurs
+     * @return
+     */
     private Set<Realisateur> convertRealisateurs(JSONArray realisateurs) {
         Iterator<JSONObject> iterator = realisateurs.iterator();
         Set<Realisateur> realisateurList = new HashSet<>();
         while (iterator.hasNext()) {
             JSONObject jRealisateur = iterator.next();
             if (jRealisateur.containsKey("id")) {
-                Realisateur realisateurFound = realisateurRepository.findById(Integer.parseInt((String) jRealisateur.get("id")));
+                Realisateur realisateurFound = realisateurService.findById(jRealisateur.get("id").toString());
                 if (realisateurFound != null) {
                     realisateurList.add(realisateurFound);
                 } else {
@@ -189,7 +217,7 @@ public class ManageFile {
                             realisateur.setLieu(lieu);
                         }
                     }
-                    realisateurRepository.save(realisateur);
+                    realisateurService.add(realisateur);
                     realisateurList.add(realisateur);
                 }
             }
@@ -198,42 +226,50 @@ public class ManageFile {
         return realisateurList;
     }
 
+    /**
+     * @param langueName
+     * @return
+     */
     private Langue getLangue(String langueName) {
-        Langue langue = langueRepository.save(langueName);
+        Langue langue = langueService.add(langueName);
         return langue;
     }
 
+    /**
+     * @param lieuTournage
+     * @return
+     */
     private Lieu convertLieu(Object lieuTournage) {
         Lieu lieu = new Lieu();
         JSONObject jlieu = (JSONObject) lieuTournage;
         if (jlieu.containsKey("ville") && !jlieu.get("ville").toString().isEmpty()) {
             System.out.println(jlieu.get("ville").toString());
             System.out.println("in");
-            Ville ville = villeService.save(jlieu.get("ville").toString());
+            Ville ville = villeService.add(jlieu.get("ville").toString());
             lieu.setVille(ville);
         }
         if (jlieu.containsKey("pays") && jlieu.get("pays") != null) {
-            Pays pays = paysRepository.save(jlieu.get("pays").toString());
+            Pays pays = paysService.add(jlieu.get("pays").toString());
             lieu.setPays(pays);
         }
         if (jlieu.containsKey("etatDept") && jlieu.get("etatDept") != null) {
-            EtatDpt etatDpt = etatDptRepository.save(jlieu.get("etatDept").toString());
+            EtatDpt etatDpt = etatDptService.add(jlieu.get("etatDept").toString());
             lieu.setEtatDpt(etatDpt);
         }
-        lieuRepository.save(lieu);
+        lieuService.add(lieu);
         return lieu;
     }
 
+    /**
+     * @param genreList
+     * @return
+     */
     private Set<Genre> convertGenres(String[] genreList) {
         Set<Genre> genres = new HashSet<>();
         for (String genreName : genreList) {
-            Genre genre = genreRepository.save(genreName);
+            Genre genre = genreService.add(genreName);
             genres.add(genre);
         }
         return genres;
-    }
-
-    public void setVilleService(VilleService villeService) {
-        this.villeService = villeService;
     }
 }
