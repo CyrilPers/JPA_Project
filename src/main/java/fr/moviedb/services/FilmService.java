@@ -7,12 +7,7 @@ import java.util.Set;
 
 public class FilmService {
 
-    private final FilmRepository filmRepository;
-
-
-    public FilmService(FilmRepository filmRepository) {
-        this.filmRepository = filmRepository;
-    }
+    private FilmRepository filmRepository;
 
     public Film add(Film film) {
         return filmRepository.save(film);
@@ -21,4 +16,18 @@ public class FilmService {
     public Set<Film> findByActors(String actorName1, String actorName2) {
         return filmRepository.findByActors(actorName1, actorName2);
     }
+
+    public Set<Film> findByPeriod(int startYear, int endYear) {
+        return filmRepository.findByPeriod(startYear, endYear);
+    }
+
+    public Set<Film> findByPeriodAndActors(int startYear, int endYear, String actorName) {
+        return filmRepository.findByPeriodAndActor(startYear, endYear, actorName);
+    }
+
+    public Set<Film> findByActor(String actorName) {
+        return filmRepository.findByActor(actorName);
+    }
+
+
 }

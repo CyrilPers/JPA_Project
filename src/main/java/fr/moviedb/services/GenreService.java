@@ -6,11 +6,8 @@ import jakarta.persistence.EntityTransaction;
 
 public class GenreService {
 
-    private final GenreRepository genreRepository;
+    private  GenreRepository genreRepository;
 
-    public GenreService(GenreRepository genreRepository) {
-        this.genreRepository = genreRepository;
-    }
 
     public Genre add(String nom) {
         Genre genreFound = genreRepository.findGenreByName(nom);

@@ -7,12 +7,8 @@ import fr.moviedb.repository.VilleRepository;
 
 public class EtatDptService {
 
-    private final EtatDptRepository etatDptRepository;
+    private EtatDptRepository etatDptRepository;
 
-
-    public EtatDptService(EtatDptRepository etatDptRepository) {
-        this.etatDptRepository = etatDptRepository;
-    }
 
     public EtatDpt add(String nom) {
         EtatDpt etatDptFound = etatDptRepository.findEtatDptByName(nom);

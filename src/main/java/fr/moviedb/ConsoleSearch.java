@@ -1,14 +1,20 @@
 package fr.moviedb;
 
+import fr.moviedb.entities.Acteur;
 import fr.moviedb.entities.Film;
+import fr.moviedb.services.ActeurService;
 import fr.moviedb.services.FilmService;
+import org.hibernate.service.spi.InjectService;
 
-import java.time.Year;
+import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
 
 public class ConsoleSearch {
 
+
+    private FilmService filmService;
+    private ActeurService acteurService;
 
     private static Scanner scanner = new Scanner(System.in);
 
@@ -56,15 +62,24 @@ public class ConsoleSearch {
     }
 
     private static void displayMovieByPeriodAndActor(boolean addActor) {
+        Set<Film> films = new HashSet<>();
         System.out.println("Veuillez la indiquer la période :");
         System.out.println("Début de période (année):");
         int startYear = scanner.nextInt();
         System.out.println("Fin de période (année) ");
         int endYear = scanner.nextInt();
         if (addActor) {
-
+            System.out.println("Nom de l'acteur :");
+            String actorName = scanner.nextLine();
+            films = filmService.findByPeriodAndActors(startYear, endYear, actorName);
         } else {
-
+            films = filmService.findByPeriod(startYear, endYear);
+        }
+        if (films.size() == 0) {
+            System.out.println("Aucun film trouvé");
+        } else {
+            System.out.println("Liste des films :");
+            films.forEach(film -> System.out.println(film.toString()));
         }
     }
 
@@ -93,13 +108,22 @@ public class ConsoleSearch {
     private static void displayCastingByMovie() {
         System.out.println("Veuillez indiquer le nom du film :");
         String movieName = scanner.nextLine();
-
+        Set<Acteur> acteurs = acteurService.findByMovie(movieName);
+        if (acteurs.isEmpty()) {
+            System.out.println("Aucun acteur trouvé");
+        } else {
+            acteurs.forEach(acteur -> System.out.println(acteur.toString()));
+        }
     }
 
     private static void displayMovieByActor() {
         System.out.println("Veuillez indiquer le prénom et le nom de l'acteur :");
-        String acteurName = scanner.nextLine();
+        String actorName = scanner.nextLine();
+        Set<Film> films = filmService.findByActor(actorName);
+        if (films.isEmpty()) {
+            System.out.println("Aucun film trouvé");
+        } else {
+            films.forEach(film -> System.out.println(film.toString()));
+        }
     }
-
-
 }

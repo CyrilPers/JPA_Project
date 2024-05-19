@@ -151,7 +151,6 @@ public class Film {
 
     @Override
     public String toString() {
-        return nom + " " + annee;
+        return "Film [ Nom :" + nom + " Annee : " + annee + "]";
     }
-
 }

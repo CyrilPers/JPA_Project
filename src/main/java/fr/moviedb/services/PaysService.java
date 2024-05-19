@@ -9,10 +9,6 @@ public class PaysService {
 
     private PaysRepository paysRepository;
 
-    public PaysService(PaysRepository paysRepository) {
-        this.paysRepository = paysRepository;
-    }
-
     public Pays add(String nom) {
         Pays paysFound = paysRepository.findPaysByName(nom);
         if (paysFound != null) {

@@ -30,7 +30,6 @@ public class AJoueRepository {
      * @return
      */
     public AJoue save(AJoue aJoue) {
-        EntityTransaction transaction = em.getTransaction();
         transaction.begin();
         em.persist(aJoue);
         transaction.commit();

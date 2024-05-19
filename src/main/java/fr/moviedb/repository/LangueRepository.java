@@ -17,7 +17,6 @@ public class LangueRepository {
     }
 
     public Langue save(Langue langue) {
-        EntityTransaction transaction = em.getTransaction();
         transaction.begin();
         em.persist(langue);
         transaction.commit();

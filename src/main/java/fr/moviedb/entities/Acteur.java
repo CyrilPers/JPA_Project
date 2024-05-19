@@ -32,4 +32,9 @@ public class Acteur extends Personne{
         this.aJoues = aJoues;
     }
 
+    @Override
+    public String toString() {
+        return "Acteur : [ identité : " + getIdentite() + " taille " + taille +" ]";
+    }
+
 }

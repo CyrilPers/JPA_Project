@@ -16,7 +16,6 @@ public class GenreRepository {
     }
 
     public Genre save(Genre genre) {
-        EntityTransaction transaction = em.getTransaction();
         transaction.begin();
         em.persist(genre);
         transaction.commit();

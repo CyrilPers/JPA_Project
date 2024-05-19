@@ -4,12 +4,8 @@ import fr.moviedb.entities.Ville;
 import fr.moviedb.repository.VilleRepository;
 
 public class VilleService {
-    private final VilleRepository villeRepository;
 
-
-    public VilleService(VilleRepository villeRepository) {
-        this.villeRepository = villeRepository;
-    }
+    private  VilleRepository villeRepository;
 
     public Ville add(String nom) {
         Ville villeFound = villeRepository.findVilleByName(nom);

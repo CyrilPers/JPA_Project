@@ -19,7 +19,6 @@ public class RealisateurRepository {
     }
 
     public Realisateur save(Realisateur realisateur) {
-        EntityTransaction transaction = em.getTransaction();
         transaction.begin();
         em.persist(realisateur);
         transaction.commit();

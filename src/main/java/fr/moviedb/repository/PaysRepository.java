@@ -10,9 +10,6 @@ public class PaysRepository {
     private EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
     private EntityTransaction transaction = em.getTransaction();
 
-    public PaysRepository(EntityManager em) {
-        this.em = em;
-    }
 
     public Pays findPaysByName(String nom) {
         return em.find(Pays.class, nom);

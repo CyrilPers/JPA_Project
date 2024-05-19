@@ -19,7 +19,6 @@ public class LieuRepository {
     }
 
     public Lieu save(Lieu lieu) {
-        EntityTransaction transaction = em.getTransaction();
         transaction.begin();
         em.persist(lieu);
         transaction.commit();

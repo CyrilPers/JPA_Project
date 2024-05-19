@@ -1,15 +1,15 @@
 package fr.moviedb.services;
 
 import fr.moviedb.entities.Acteur;
+import fr.moviedb.entities.Film;
 import fr.moviedb.repository.ActeurRepository;
+import org.hibernate.service.spi.InjectService;
+
+import java.util.Set;
 
 public class ActeurService {
 
     private ActeurRepository acteurRepository;
-
-    public ActeurService(ActeurRepository acteurRepository) {
-        this.acteurRepository = acteurRepository;
-    }
 
     public Acteur findById(String idActeur) {
         return acteurRepository.findById(idActeur);
@@ -18,4 +18,10 @@ public class ActeurService {
     public Acteur add(Acteur acteur) {
         return acteurRepository.save(acteur);
     }
+
+    public Set<Acteur> findByMovie(String movieName) {
+        return acteurRepository.findByMovie(movieName);
+    }
+
+
 }

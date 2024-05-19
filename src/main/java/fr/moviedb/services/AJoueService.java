@@ -9,15 +9,13 @@ public class AJoueService {
 
     private AJoueRepository aJoueRepository;
 
-    public AJoueService(AJoueRepository aJoueRepository) {
-        this.aJoueRepository = aJoueRepository;
-    }
-
-    public AJoue findAjoueByFilmAndActeur(String film, String acteur) {
-        return aJoueRepository.findAjoueByFilmAndActeur(film, acteur);
-    }
 
     public AJoue add(AJoue aJoue) {
         return aJoueRepository.save(aJoue);
     }
+
+    public AJoue findAjoueByFilmAndActeur(String acteurId, String idFilm) {
+        return aJoueRepository.findAjoueByFilmAndActeur(acteurId, idFilm);
+    }
 }
+

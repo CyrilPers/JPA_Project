@@ -7,11 +7,7 @@ import fr.moviedb.repository.LieuRepository;
 
 public class LieuService {
 
-    private final LieuRepository lieuRepository;
-
-    public LieuService(LieuRepository lieuRepository) {
-        this.lieuRepository = lieuRepository;
-    }
+    private  LieuRepository lieuRepository;
 
     public Lieu add(Lieu lieu) {
         Lieu lieuFound = lieuRepository.find(lieu.getId());
