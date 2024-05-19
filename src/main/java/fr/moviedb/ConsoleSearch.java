@@ -40,6 +40,9 @@ public class ConsoleSearch {
                 case 6:
                     displayMovieByPeriodAndActor(true);
                     break;
+                case 7:
+                    System.out.println("Fin de l'applicaiton");
+                    running = false;
             }
 
         }
