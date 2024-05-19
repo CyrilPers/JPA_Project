@@ -28,6 +28,7 @@ public class ManageFile {
     private EtatDptService etatDptService;
     private LieuService lieuService;
     private GenreService genreService;
+    private FilmService filmService;
 
     public void parseToDb() throws IOException, ParseException {
 
@@ -92,7 +93,7 @@ public class ManageFile {
                     addRoleToAJoue(roles, film);
 
             }
-
+            filmService.add(film);
         }
     }
 

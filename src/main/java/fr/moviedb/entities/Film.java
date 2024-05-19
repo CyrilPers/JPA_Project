@@ -149,4 +149,9 @@ public class Film {
         this.genres = genres;
     }
 
+    @Override
+    public String toString() {
+        return nom + " " + annee;
+    }
+
 }

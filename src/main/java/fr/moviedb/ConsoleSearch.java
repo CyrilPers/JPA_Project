@@ -1,13 +1,19 @@
 package fr.moviedb;
 
+import fr.moviedb.entities.Film;
+import fr.moviedb.services.FilmService;
+
 import java.time.Year;
 import java.util.Scanner;
+import java.util.Set;
 
 public class ConsoleSearch {
+
 
     private static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
+
         boolean running = true;
 
         while (running) {
@@ -76,11 +82,18 @@ public class ConsoleSearch {
         String actor1 = scanner.nextLine();
         System.out.println("Acteur 2 (prénom et nom) :");
         String actor2 = scanner.nextLine();
+        Set<Film> films = filmService.findByActors(actor1, actor2);
+        if (films.isEmpty()) {
+            System.out.println("Aucun film trouvé");
+        } else {
+            films.forEach(film -> System.out.println(film.toString()));
+        }
     }
 
     private static void displayCastingByMovie() {
         System.out.println("Veuillez indiquer le nom du film :");
         String movieName = scanner.nextLine();
+
     }
 
     private static void displayMovieByActor() {
