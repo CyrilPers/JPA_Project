@@ -1,8 +1,7 @@
 package fr.moviedb.repository;
 
 import fr.moviedb.entities.Film;
-import fr.moviedb.entities.Langue;
-import fr.moviedb.utils.JPAUtil;
+import fr.moviedb.utils.ConnectionEntityManager;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 
@@ -10,7 +9,7 @@ import java.util.Set;
 
 public class FilmRepository {
 
-    private EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
+    private EntityManager em = ConnectionEntityManager.getEm();
     private EntityTransaction transaction = em.getTransaction();
 
 

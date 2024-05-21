@@ -1,12 +1,12 @@
 package fr.moviedb.repository;
 
 import fr.moviedb.entities.EtatDpt;
-import fr.moviedb.utils.JPAUtil;
+import fr.moviedb.utils.ConnectionEntityManager;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 
 public class EtatDptRepository {
-    private EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
+    private EntityManager em = ConnectionEntityManager.getEm();
     private EntityTransaction transaction = em.getTransaction();
 
     public EtatDpt findEtatDptByName(String nom) {

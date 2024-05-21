@@ -1,13 +1,13 @@
 package fr.moviedb.repository;
 
-import fr.moviedb.entities.Genre;
 import fr.moviedb.entities.Langue;
-import fr.moviedb.utils.JPAUtil;
+
+import fr.moviedb.utils.ConnectionEntityManager;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 
 public class LangueRepository {
-    private EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
+    private EntityManager em = ConnectionEntityManager.getEm();
     private EntityTransaction transaction = em.getTransaction();
 
     public Langue findLangueByName(String libelle) {

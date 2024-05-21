@@ -2,12 +2,12 @@ package fr.moviedb.repository;
 
 import fr.moviedb.entities.Lieu;
 import fr.moviedb.entities.LieuId;
-import fr.moviedb.utils.JPAUtil;
+import fr.moviedb.utils.ConnectionEntityManager;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 
 public class LieuRepository {
-    private EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
+    private EntityManager em = ConnectionEntityManager.getEm();
     private EntityTransaction transaction = em.getTransaction();
 
     public Lieu find(LieuId lieuid) {
