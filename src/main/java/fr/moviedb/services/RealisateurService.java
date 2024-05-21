@@ -8,7 +8,11 @@ public class RealisateurService {
     private RealisateurRepository realisateurRepository = new RealisateurRepository();
 
     public Realisateur findById(String idRealisateur) {
-        return realisateurRepository.findById(idRealisateur);
+        try {
+            return realisateurRepository.findById(idRealisateur);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public Realisateur add(Realisateur realissateur) {

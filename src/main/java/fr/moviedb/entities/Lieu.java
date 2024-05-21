@@ -32,6 +32,16 @@ public class Lieu {
     @OneToMany(mappedBy = "lieu")
     private Set<Personne> personnes = new HashSet<>();
 
+    public Lieu() {
+    }
+
+    public Lieu(Ville ville, EtatDpt etatDpt, Pays pays) {
+        super();
+        this.ville = ville;
+        this.etatDpt = etatDpt;
+        this.pays = pays;
+    }
+
 
     public Integer getId() {
         return id;

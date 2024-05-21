@@ -5,6 +5,7 @@ import org.hibernate.mapping.Join;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Date;
 
 @Entity
 @Table(name = "personne")
@@ -18,7 +19,7 @@ public abstract class Personne {
     private String identite;
 
     @Column(name = "date_naissance")
-    private LocalDate dateNaissance;
+    private Date dateNaissance;
 
     @Column(name = "taille", precision = 4, scale = 2)
     private BigDecimal taille;
@@ -46,11 +47,11 @@ public abstract class Personne {
         this.identite = identite;
     }
 
-    public LocalDate getDateNaissance() {
+    public Date getDateNaissance() {
         return dateNaissance;
     }
 
-    public void setDateNaissance(LocalDate dateNaissance) {
+    public void setDateNaissance(Date dateNaissance) {
         this.dateNaissance = dateNaissance;
     }
 

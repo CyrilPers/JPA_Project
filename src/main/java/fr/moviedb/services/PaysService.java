@@ -12,6 +12,8 @@ public class PaysService {
             return paysRepository.findPaysByName(nom);
         } catch (Exception e) {
             Pays pays = new Pays(nom);
+            System.out.println("save");
+            System.out.println("nom");
             return paysRepository.save(pays);
         }
     }

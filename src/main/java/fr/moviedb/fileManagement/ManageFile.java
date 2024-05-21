@@ -11,6 +11,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -39,7 +40,7 @@ public class ManageFile {
             JSONObject jFilm = iterator.next();
             Film film = new Film();
             film.setIdFilm(jFilm.get("id").toString());
-            if (jFilm.containsKey("nom") && jFilm.get("nom") != null) {
+            if (jFilm.containsKey("nom") && jFilm.get("nom") != null  && !jFilm.get("nom").toString().isBlank()) {
                 film.setNom(jFilm.get("nom").toString());
             }
             if (jFilm.containsKey("anneeSortie") && jFilm.get("anneeSortie") != null) {
@@ -52,7 +53,7 @@ public class ManageFile {
                 film.setUrl((String) jFilm.get("url"));
             }
             if (jFilm.containsKey("lieuTournage") && jFilm.get("lieuTournage") != null) {
-                Lieu lieu = convertLieu(jFilm.get("lieuTournage"));
+                Lieu lieu = convertLieu((JSONObject) jFilm.get("lieuTournage"));
                 film.setLieu(lieu);
             }
             if (jFilm.containsKey("genres") && jFilm.get("genres") != null) {
@@ -67,8 +68,10 @@ public class ManageFile {
                 film.setResume(jFilm.get("plot").toString());
             }
             if (jFilm.containsKey("pays") && jFilm.get("pays") != null) {
-                Pays pays = paysService.add(jFilm.get("Pays").toString());
-                film.setPays(pays);
+                JSONObject jPays = (JSONObject) jFilm.get("pays");
+                if (jPays.containsKey("nom") && jPays.get("pays") != null) {
+                    paysService.add(jPays.get("pays").toString());
+                }
             }
             if (jFilm.containsKey("realisateurs") && jFilm.get("realisateurs") != null){
                 JSONArray realisateurs = (JSONArray) jFilm.get("realisateurs");
@@ -169,13 +172,12 @@ public class ManageFile {
                         JSONObject naissance = (JSONObject) jActeur.get("naissance");
                         if (naissance.containsKey("dateNaissance")) {
                             // TODO CONVERT STRING DATE
-                            acteur.setDateNaissance(LocalDate.parse(String.valueOf(jActeur.get("naissance"))));
+                            acteur.setDateNaissance(new Date(jActeur.get("naissance").toString()));
                         }
                         if (naissance.containsKey("lieuNaissance")) {
-                            Lieu lieu = convertLieu(naissance.get("lieuNaissance"));
+                            Lieu lieu = convertLieuNaissance(naissance.get("lieuNaissance").toString());
                             acteur.setLieu(lieu);
                         }
-
                     }
                     acteurService.add(acteur);
                     acteurList.add(acteur);
@@ -209,12 +211,17 @@ public class ManageFile {
                     }
                     if (jRealisateur.containsKey("naissance")) {
                         JSONObject naissance = (JSONObject) jRealisateur.get("naissance");
-                        if (naissance.containsKey("dateNaissance")) {
-                            realisateur.setDateNaissance(LocalDate.parse(String.valueOf(jRealisateur.get("naissance"))));
+                        if (naissance.containsKey("dateNaissance") && naissance.get("dateNaissance") != null) {
+                            if (!naissance.get("dateNaissance").toString().isBlank()) {
+                                realisateur.setDateNaissance(new Date(naissance.get("dateNaissance").toString()));
+                            }
                         }
-                        if (naissance.containsKey("lieuNaissance")) {
-                            Lieu lieu = convertLieu(naissance.get("lieuNaissance"));
-                            realisateur.setLieu(lieu);
+                        if (naissance.containsKey("lieuNaissance") && naissance.get("lieuNaissance") != null) {
+                            if (!naissance.get("lieuNaissance").toString().isBlank()) {
+                                Lieu lieu = convertLieuNaissance(naissance.get("lieuNaissance").toString());
+                                realisateur.setLieu(lieu);
+
+                            }
                         }
                     }
                     realisateurService.add(realisateur);
@@ -235,13 +242,26 @@ public class ManageFile {
         return langue;
     }
 
+
     /**
-     * @param lieuTournage
+     * @param lieuNaissance
      * @return
      */
-    private Lieu convertLieu(Object lieuTournage) {
+    private Lieu convertLieuNaissance(String lieuNaissance) {
+        String[] lieuElements = lieuNaissance.split(",");
+        Ville ville = villeService.add(lieuElements[0]);
+        EtatDpt etatDpt = etatDptService.add(lieuElements[1]);
+        Pays pays = paysService.add(lieuElements[2]);
+        Lieu lieu = new Lieu(ville, etatDpt, pays);
+        return lieu;
+    }
+
+    /**
+     * @param jlieu
+     * @return
+     */
+    private Lieu convertLieu(JSONObject jlieu) {
         Lieu lieu = new Lieu();
-        JSONObject jlieu = (JSONObject) lieuTournage;
         if (jlieu.containsKey("ville") && !jlieu.get("ville").toString().isEmpty()) {
             Ville ville = villeService.add(jlieu.get("ville").toString());
             lieu.setVille(ville);
