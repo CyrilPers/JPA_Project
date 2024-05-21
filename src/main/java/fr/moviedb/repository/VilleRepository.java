@@ -10,10 +10,12 @@ public class VilleRepository {
     private EntityTransaction transaction = em.getTransaction();
 
     public Ville findVilleByName(String nom) {
+        System.out.println(nom);
         return em.find(Ville.class, nom);
     }
 
     public Ville save(Ville ville) {
+        System.out.println(ville.toString());
         transaction.begin();
         em.persist(ville);
         transaction.commit();

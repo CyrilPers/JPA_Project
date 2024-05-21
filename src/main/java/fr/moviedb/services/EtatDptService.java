@@ -7,7 +7,7 @@ import fr.moviedb.repository.VilleRepository;
 
 public class EtatDptService {
 
-    private EtatDptRepository etatDptRepository;
+    private EtatDptRepository etatDptRepository = new EtatDptRepository();
 
 
     public EtatDpt add(String nom) {

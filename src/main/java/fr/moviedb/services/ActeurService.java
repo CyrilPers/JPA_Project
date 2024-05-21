@@ -7,7 +7,7 @@ import java.util.Set;
 
 public class ActeurService {
 
-    private ActeurRepository acteurRepository;
+    private ActeurRepository acteurRepository = new ActeurRepository();
 
     public Acteur findById(String idActeur) {
         return acteurRepository.findById(idActeur);

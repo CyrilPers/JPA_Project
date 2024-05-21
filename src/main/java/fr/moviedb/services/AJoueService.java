@@ -7,7 +7,7 @@ import fr.moviedb.repository.PaysRepository;
 
 public class AJoueService {
 
-    private AJoueRepository aJoueRepository;
+    private AJoueRepository aJoueRepository = new AJoueRepository();
 
 
     public AJoue add(AJoue aJoue) {

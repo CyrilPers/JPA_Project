@@ -6,7 +6,7 @@ import fr.moviedb.repository.LangueRepository;
 import fr.moviedb.repository.VilleRepository;
 
 public class LangueService {
-    private LangueRepository langueRepository;
+    private LangueRepository langueRepository = new LangueRepository();
 
 
     public Langue add(String nom) {

@@ -4,11 +4,12 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
 public class JPAUtil {
-    private static final EntityManagerFactory entityManagerFactory;
 
-    static {
+    private static final EntityManagerFactory entityManagerFactory = buildEntityManagerFactory();
+
+    private static EntityManagerFactory buildEntityManagerFactory() {
         try {
-            entityManagerFactory = Persistence.createEntityManagerFactory("movie_db");
+            return Persistence.createEntityManagerFactory("movie_db");
         } catch (Throwable ex) {
             throw new ExceptionInInitializerError(ex);
         }

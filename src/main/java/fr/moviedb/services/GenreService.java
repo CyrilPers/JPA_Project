@@ -6,7 +6,7 @@ import jakarta.persistence.EntityTransaction;
 
 public class GenreService {
 
-    private  GenreRepository genreRepository;
+    private  GenreRepository genreRepository = new GenreRepository();
 
 
     public Genre add(String nom) {

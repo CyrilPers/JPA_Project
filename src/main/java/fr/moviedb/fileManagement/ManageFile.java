@@ -16,22 +16,20 @@ import java.util.Iterator;
 import java.util.Set;
 
 
-
 public class ManageFile {
 
-    private VilleService villeService;
-    private PaysService paysService;
-    private AJoueService aJoueService;
-    private ActeurService acteurService;
-    private RealisateurService realisateurService;
-    private LangueService langueService;
-    private EtatDptService etatDptService;
-    private LieuService lieuService;
-    private GenreService genreService;
-    private FilmService filmService;
+    private final VilleService villeService = new VilleService();
+    private final PaysService paysService = new PaysService();
+    private final AJoueService aJoueService = new AJoueService();
+    private final ActeurService acteurService = new ActeurService();
+    private final RealisateurService realisateurService = new RealisateurService();
+    private final LangueService langueService = new LangueService();
+    private final EtatDptService etatDptService = new EtatDptService();
+    private final LieuService lieuService = new LieuService();
+    private final GenreService genreService = new GenreService();
+    private final FilmService filmService = new FilmService();
 
     public void parseToDb() throws IOException, ParseException {
-
         String filePath = "src/main/resources/files/films.json";
         JSONParser parser = new JSONParser();
         Object object = parser.parse(new FileReader(filePath));
@@ -75,8 +73,8 @@ public class ManageFile {
             if (jFilm.containsKey("realisateurs")) {
                 JSONArray realisateurs = (JSONArray) jFilm.get("realisateurs");
                 if (realisateurs.size() > 0) {
-                Set<Realisateur> realisateurList = convertRealisateurs(realisateurs);
-                film.setRealisateurs(realisateurList);
+                    Set<Realisateur> realisateurList = convertRealisateurs(realisateurs);
+                    film.setRealisateurs(realisateurList);
                 }
             }
             if (jFilm.containsKey("castingPrincipal")) {
@@ -170,6 +168,7 @@ public class ManageFile {
                     if (jActeur.containsKey("naissance")) {
                         JSONObject naissance = (JSONObject) jActeur.get("naissance");
                         if (naissance.containsKey("dateNaissance")) {
+                            // TODO CONVERT STRING DATE
                             acteur.setDateNaissance(LocalDate.parse(String.valueOf(jActeur.get("naissance"))));
                         }
                         if (naissance.containsKey("lieuNaissance")) {

@@ -7,7 +7,7 @@ import java.util.Set;
 
 public class FilmService {
 
-    private FilmRepository filmRepository;
+    private FilmRepository filmRepository = new FilmRepository();
 
     public Film add(Film film) {
         return filmRepository.save(film);

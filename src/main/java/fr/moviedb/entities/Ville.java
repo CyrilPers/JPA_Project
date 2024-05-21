@@ -13,6 +13,10 @@ public class Ville {
         this.nom = ville;
     }
 
+    public Ville() {
+
+    }
+
     public String getNom() {
         return nom;
     }

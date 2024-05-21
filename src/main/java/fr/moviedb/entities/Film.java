@@ -33,7 +33,6 @@ public class Film {
     private Pays pays;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id_lieu", nullable = false)
     private Lieu lieu;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -43,10 +42,10 @@ public class Film {
     @OneToMany(mappedBy = "film")
     private Set<AJoue> aJoues = new HashSet<>();
 
-    @ManyToMany(mappedBy = "idFilm")
+    @ManyToMany(mappedBy = "films")
     private Set<Genre> genres = new HashSet<>();
 
-    @ManyToMany(mappedBy = "idFilm")
+    @ManyToMany(mappedBy = "films")
     private Set<Realisateur> realisateurs = new HashSet<>();
 
     public Film() {

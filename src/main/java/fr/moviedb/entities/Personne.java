@@ -7,6 +7,7 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "personne")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class Personne {
     @Id
     @Column(name = "id_personne", nullable = false, length = 50)
@@ -25,7 +26,6 @@ public abstract class Personne {
     private String url;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id_lieu", nullable = false)
     private Lieu lieu;
 
     @OneToOne(mappedBy = "idPersonne")

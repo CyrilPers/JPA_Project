@@ -2,7 +2,7 @@ package fr.moviedb.entities;
 
 import jakarta.persistence.*;
 
-import java.util.LinkedHashSet;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -27,10 +27,11 @@ public class Lieu {
     private Pays pays;
 
     @OneToMany(mappedBy = "lieu")
-    private Set<Film> films = new LinkedHashSet<>();
+    private Set<Film> films = new HashSet<>();
+
 
     @OneToMany(mappedBy = "lieu")
-    private Set<Personne> personnes = new LinkedHashSet<>();
+    private Set<Personne> personnes = new HashSet<>();
 
 
     public LieuId getId() {

@@ -5,7 +5,7 @@ import fr.moviedb.repository.RealisateurRepository;
 
 public class RealisateurService {
 
-    private RealisateurRepository realisateurRepository;
+    private RealisateurRepository realisateurRepository = new RealisateurRepository();
 
     public Realisateur findById(String idRealisateur) {
         return realisateurRepository.findById(idRealisateur);

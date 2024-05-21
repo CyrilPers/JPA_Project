@@ -7,7 +7,7 @@ import fr.moviedb.repository.VilleRepository;
 
 public class PaysService {
 
-    private PaysRepository paysRepository;
+    private PaysRepository paysRepository = new PaysRepository();
 
     public Pays add(String nom) {
         Pays paysFound = paysRepository.findPaysByName(nom);

@@ -4,7 +4,6 @@ import fr.moviedb.entities.Acteur;
 import fr.moviedb.entities.Film;
 import fr.moviedb.services.ActeurService;
 import fr.moviedb.services.FilmService;
-import org.hibernate.service.spi.InjectService;
 
 import java.util.HashSet;
 import java.util.Scanner;
@@ -13,8 +12,8 @@ import java.util.Set;
 public class ConsoleSearch {
 
 
-    private FilmService filmService;
-    private ActeurService acteurService;
+    private static FilmService filmService = new FilmService();
+    private static ActeurService acteurService = new ActeurService();
 
     private static Scanner scanner = new Scanner(System.in);
 
@@ -57,10 +56,9 @@ public class ConsoleSearch {
                     running = false;
                     break;
                 default:
-                    System.out.println("Veuillez rentrer un chiffre entre 1 et 7 correspondant à votre choix");
+                    System.err.println("Veuillez rentrer un chiffre entre 1 et 7 correspondant à votre choix");
                     break;
             }
-
         }
 
     }
@@ -93,7 +91,7 @@ public class ConsoleSearch {
         String movie1 = scanner.nextLine();
         System.out.println("Film 2: ");
         String movie2 = scanner.nextLine();
-        Set<Acteur> acteurs = acteurService.findMovieWithSameActors(movie1, movie2);
+        Set<Acteur> acteurs = acteurService.findSameActorsInMovies(movie1, movie2);
         if (acteurs.isEmpty()) {
             System.out.println("Aucun acteurs trouvés");
         } else {
