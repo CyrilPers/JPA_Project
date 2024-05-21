@@ -13,17 +13,14 @@ public class Lieu {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @MapsId("ville")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ville")
     private Ville ville;
 
-    @MapsId("etatDpt")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "etat_dpt")
     private EtatDpt etatDpt;
 
-    @MapsId("pays")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pays")
     private Pays pays;

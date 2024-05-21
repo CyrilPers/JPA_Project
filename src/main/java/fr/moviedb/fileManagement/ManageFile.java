@@ -2,6 +2,7 @@ package fr.moviedb.fileManagement;
 
 import fr.moviedb.entities.*;
 import fr.moviedb.services.*;
+import jdk.swing.interop.SwingInterOpUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -243,12 +244,10 @@ public class ManageFile {
         Lieu lieu = new Lieu();
         JSONObject jlieu = (JSONObject) lieuTournage;
         if (jlieu.containsKey("ville") && !jlieu.get("ville").toString().isEmpty()) {
-            System.out.println(jlieu.get("ville").toString());
-            System.out.println("in");
             Ville ville = villeService.add(jlieu.get("ville").toString());
             lieu.setVille(ville);
         }
-        if (jlieu.containsKey("pays") && jlieu.get("pays") != null) {
+        if (jlieu.containsKey("pays") && !jlieu.get("pays").toString().isEmpty()) {
             Pays pays = paysService.add(jlieu.get("pays").toString());
             lieu.setPays(pays);
         }

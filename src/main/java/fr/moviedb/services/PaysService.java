@@ -1,9 +1,7 @@
 package fr.moviedb.services;
 
 import fr.moviedb.entities.Pays;
-import fr.moviedb.entities.Ville;
 import fr.moviedb.repository.PaysRepository;
-import fr.moviedb.repository.VilleRepository;
 
 public class PaysService {
 
