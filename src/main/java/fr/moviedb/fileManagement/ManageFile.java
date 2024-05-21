@@ -2,7 +2,6 @@ package fr.moviedb.fileManagement;
 
 import fr.moviedb.entities.*;
 import fr.moviedb.services.*;
-import jdk.swing.interop.SwingInterOpUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -40,45 +39,45 @@ public class ManageFile {
             JSONObject jFilm = iterator.next();
             Film film = new Film();
             film.setIdFilm(jFilm.get("id").toString());
-            if (jFilm.containsKey("nom")) {
+            if (jFilm.containsKey("nom") && jFilm.get("nom") != null) {
                 film.setNom(jFilm.get("nom").toString());
             }
-            if (jFilm.containsKey("anneeSortie")) {
+            if (jFilm.containsKey("anneeSortie") && jFilm.get("anneeSortie") != null) {
                 film.setAnnee(Integer.parseInt((String) jFilm.get("anneeSortie")));
             }
-            if (jFilm.containsKey("rating")) {
+            if (jFilm.containsKey("rating")&& jFilm.get("rating") != null) {
                 film.setRating(new BigDecimal((String) jFilm.get("rating")));
             }
-            if (jFilm.containsKey("url")) {
+            if (jFilm.containsKey("url") && jFilm.get("url") != null) {
                 film.setUrl((String) jFilm.get("url"));
             }
-            if (jFilm.containsKey("lieuTournage")) {
+            if (jFilm.containsKey("lieuTournage") && jFilm.get("lieuTournage") != null) {
                 Lieu lieu = convertLieu(jFilm.get("lieuTournage"));
                 film.setLieu(lieu);
             }
-            if (jFilm.containsKey("genres")) {
-                Set<Genre> genres = convertGenres((String[]) jFilm.get("genres"));
+            if (jFilm.containsKey("genres") && jFilm.get("genres") != null) {
+                Set<Genre> genres = convertGenres((JSONArray) jFilm.get("genres"));
                 film.setGenres(genres);
             }
-            if (jFilm.containsKey("langue")) {
+            if (jFilm.containsKey("langue") && jFilm.get("langue") != null) {
                 Langue langue = getLangue(jFilm.get("langue").toString());
                 film.setLangue(langue);
             }
-            if (jFilm.containsKey("plot")) {
+            if (jFilm.containsKey("plot") && jFilm.get("plot") != null) {
                 film.setResume(jFilm.get("plot").toString());
             }
-            if (jFilm.containsKey("pays")) {
+            if (jFilm.containsKey("pays") && jFilm.get("pays") != null) {
                 Pays pays = paysService.add(jFilm.get("Pays").toString());
                 film.setPays(pays);
             }
-            if (jFilm.containsKey("realisateurs")) {
+            if (jFilm.containsKey("realisateurs") && jFilm.get("realisateurs") != null){
                 JSONArray realisateurs = (JSONArray) jFilm.get("realisateurs");
                 if (realisateurs.size() > 0) {
                     Set<Realisateur> realisateurList = convertRealisateurs(realisateurs);
                     film.setRealisateurs(realisateurList);
                 }
             }
-            if (jFilm.containsKey("castingPrincipal")) {
+            if (jFilm.containsKey("castingPrincipal") && jFilm.get("castingPrincipal") != null) {
                 JSONArray castingPrincipal = (JSONArray) jFilm.get("castingPrincipal");
                 if (castingPrincipal.size() > 0) {
                     Set<Acteur> acteursList = convertActeurs(castingPrincipal);
@@ -86,7 +85,7 @@ public class ManageFile {
                     film.setaJoues(ajoueList);
                 }
             }
-            if (jFilm.containsKey("roles")) {
+            if (jFilm.containsKey("roles") && jFilm.get("roles") != null) {
                 JSONArray roles = (JSONArray) jFilm.get("roles");
                 if (!roles.isEmpty())
                     addRoleToAJoue(roles, film);
@@ -263,10 +262,10 @@ public class ManageFile {
      * @param genreList
      * @return
      */
-    private Set<Genre> convertGenres(String[] genreList) {
+    private Set<Genre> convertGenres(JSONArray genreList) {
         Set<Genre> genres = new HashSet<>();
-        for (String genreName : genreList) {
-            Genre genre = genreService.add(genreName);
+        for (Object genreName : genreList) {
+            Genre genre = genreService.add(genreName.toString());
             genres.add(genre);
         }
         return genres;

@@ -10,12 +10,11 @@ public class LangueService {
 
 
     public Langue add(String nom) {
-        Langue langueFound = langueRepository.findLangueByName(nom);
-        if (langueFound != null) {
-            return langueFound;
+        try {
+            return langueRepository.findLangueByName(nom);
+        } catch (Exception e) {
+            Langue langue = new Langue(nom);
+            return langueRepository.save(langue);
         }
-        Langue langue = new Langue(nom);
-        return langueRepository.save(langue);
     }
-
 }

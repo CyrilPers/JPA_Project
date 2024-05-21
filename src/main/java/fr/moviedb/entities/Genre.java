@@ -12,7 +12,7 @@ public class Genre {
     @Id
     @Column(name = "id_genre", nullable = false, length = 50)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String idGenre;
+    private Integer idGenre;
 
     @Column(name = "libelle", length = 50)
     private String libelle;
@@ -26,11 +26,11 @@ public class Genre {
 
     public Genre() {}
 
-    public String getIdGenre() {
+    public Integer getIdGenre() {
         return idGenre;
     }
 
-    public void setIdGenre(String idGenre) {
+    public void setIdGenre(Integer idGenre) {
         this.idGenre = idGenre;
     }
 

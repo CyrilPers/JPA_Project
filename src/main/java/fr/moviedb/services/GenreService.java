@@ -10,11 +10,11 @@ public class GenreService {
 
 
     public Genre add(String nom) {
-        Genre genreFound = genreRepository.findGenreByName(nom);
-        if (genreFound != null) {
-            return genreFound;
+        try {
+            return genreRepository.findGenreByName(nom);
+        } catch (Exception e) {
+            Genre newGenre = new Genre(nom);
+            return genreRepository.save(newGenre);
         }
-        Genre genre = new Genre(nom);
-        return genreRepository.save(genre);
     }
 }

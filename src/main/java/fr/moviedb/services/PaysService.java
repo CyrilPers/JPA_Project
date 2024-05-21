@@ -8,11 +8,11 @@ public class PaysService {
     private PaysRepository paysRepository = new PaysRepository();
 
     public Pays add(String nom) {
-        Pays paysFound = paysRepository.findPaysByName(nom);
-        if (paysFound != null) {
-            return paysFound;
+        try {
+            return paysRepository.findPaysByName(nom);
+        } catch (Exception e) {
+            Pays pays = new Pays(nom);
+            return paysRepository.save(pays);
         }
-        Pays pays = new Pays(nom);
-        return paysRepository.save(pays);
     }
 }

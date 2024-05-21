@@ -8,10 +8,11 @@ public class VilleService {
     private VilleRepository villeRepository = new VilleRepository();
 
     public Ville add(String nom) {
-        Ville villeFound = villeRepository.findVilleByName(nom);
-        if (villeFound != null)
-            return villeFound;
-        Ville ville = new Ville(nom);
-        return villeRepository.save(ville);
+        try {
+            return villeRepository.findVilleByName(nom);
+        } catch (Exception e) {
+            Ville ville = new Ville(nom);
+            return villeRepository.save(ville);
+        }
     }
 }
