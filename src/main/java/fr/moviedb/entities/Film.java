@@ -32,7 +32,8 @@ public class Film {
     @JoinColumn(name = "pays", nullable = false)
     private Pays pays;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_lieu")
     private Lieu lieu;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -42,10 +43,21 @@ public class Film {
     @OneToMany(mappedBy = "film")
     private Set<AJoue> aJoues = new HashSet<>();
 
-    @ManyToMany(mappedBy = "films")
+
+    @ManyToMany
+    @JoinTable(
+            name = "asso_2",
+            joinColumns = @JoinColumn(name = "id_film"),
+            inverseJoinColumns = @JoinColumn(name = "id_genre")
+    )
     private Set<Genre> genres = new HashSet<>();
 
-    @ManyToMany(mappedBy = "films")
+    @ManyToMany
+    @JoinTable(
+            name = "a_realise",
+            joinColumns = @JoinColumn(name = "id_film"),
+            inverseJoinColumns = @JoinColumn(name = "id_personne")
+    )
     private Set<Realisateur> realisateurs = new HashSet<>();
 
     public Film() {

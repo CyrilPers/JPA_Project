@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@Table(name="acteur")
 public class Acteur extends Personne{
 
     @Column(name = "taille", precision = 4, scale = 2)

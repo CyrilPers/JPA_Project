@@ -8,22 +8,24 @@ import java.util.Set;
 @Entity
 @Table(name = "lieu")
 public class Lieu {
-    @EmbeddedId
-    private LieuId id;
+    @Id
+    @Column(name = "id_lieu", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
     @MapsId("ville")
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "ville", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ville")
     private Ville ville;
 
     @MapsId("etatDpt")
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "etat_dpt", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "etat_dpt")
     private EtatDpt etatDpt;
 
     @MapsId("pays")
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "pays", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "pays")
     private Pays pays;
 
     @OneToMany(mappedBy = "lieu")
@@ -34,11 +36,11 @@ public class Lieu {
     private Set<Personne> personnes = new HashSet<>();
 
 
-    public LieuId getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(LieuId id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

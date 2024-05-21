@@ -7,6 +7,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Entity
+@Table(name="realisateur")
 public class Realisateur extends Personne {
 
     @ManyToMany(mappedBy = "realisateurs")
@@ -20,4 +21,8 @@ public class Realisateur extends Personne {
         this.films = films;
     }
 
+    @Override
+    public String toString() {
+        return "Realisateur : [ identité : " + getIdentite() + " ]";
+    }
 }
