@@ -38,61 +38,65 @@ public class ManageFile {
         while (iterator.hasNext()) {
             JSONObject jFilm = iterator.next();
             Film film = new Film();
-            film.setIdFilm(jFilm.get("id").toString());
-            if (jFilm.containsKey("nom") && jFilm.get("nom") != null  && !jFilm.get("nom").toString().isBlank()) {
-                film.setNom(jFilm.get("nom").toString());
-            }
-            if (jFilm.containsKey("anneeSortie") && jFilm.get("anneeSortie") != null) {
-                film.setAnnee(Integer.parseInt((String) jFilm.get("anneeSortie")));
-            }
-            if (jFilm.containsKey("rating")&& jFilm.get("rating") != null) {
-                film.setRating(new BigDecimal((String) jFilm.get("rating")));
-            }
-            if (jFilm.containsKey("url") && jFilm.get("url") != null) {
-                film.setUrl((String) jFilm.get("url"));
-            }
-            if (jFilm.containsKey("lieuTournage") && jFilm.get("lieuTournage") != null) {
-                Lieu lieu = convertLieu((JSONObject) jFilm.get("lieuTournage"));
-                film.setLieu(lieu);
-            }
-            if (jFilm.containsKey("genres") && jFilm.get("genres") != null) {
-                Set<Genre> genres = convertGenres((JSONArray) jFilm.get("genres"));
-                film.setGenres(genres);
-            }
-            if (jFilm.containsKey("langue") && jFilm.get("langue") != null) {
-                Langue langue = getLangue(jFilm.get("langue").toString());
-                film.setLangue(langue);
-            }
-            if (jFilm.containsKey("plot") && jFilm.get("plot") != null) {
-                film.setResume(jFilm.get("plot").toString());
-            }
-            if (jFilm.containsKey("pays") && jFilm.get("pays") != null) {
-                JSONObject jPays = (JSONObject) jFilm.get("pays");
-                if (jPays.containsKey("nom") && jPays.get("nom") != null) {
-                    Pays pays = paysService.add(jPays.get("nom").toString());
-                    film.setPays(pays);
+            boolean saveFilm = filmService.find(jFilm.get("id").toString()) == null ? true : false;
+            while (saveFilm) {
+                film.setIdFilm(jFilm.get("id").toString());
+                if (jFilm.containsKey("nom") && jFilm.get("nom") != null && !jFilm.get("nom").toString().isBlank()) {
+                    film.setNom(jFilm.get("nom").toString());
                 }
-            }
-            if (jFilm.containsKey("realisateurs") && jFilm.get("realisateurs") != null){
-                JSONArray realisateurs = (JSONArray) jFilm.get("realisateurs");
-                if (realisateurs.size() > 0) {
-                    Set<Realisateur> realisateurList = convertRealisateurs(realisateurs);
-                    film.setRealisateurs(realisateurList);
+
+                if (jFilm.containsKey("anneeSortie") && jFilm.get("anneeSortie") != null) {
+                    film.setAnnee(Integer.parseInt((String) jFilm.get("anneeSortie")));
                 }
-            }
-            filmService.add(film);
-            if (jFilm.containsKey("castingPrincipal") && jFilm.get("castingPrincipal") != null) {
-                JSONArray castingPrincipal = (JSONArray) jFilm.get("castingPrincipal");
-                if (castingPrincipal.size() > 0) {
-                    Set<Acteur> acteursList = convertActeurs(castingPrincipal);
-                    Set<AJoue> ajoueList = (Set<AJoue>) addActingPeople(acteursList, film);
-                    film.setaJoues(ajoueList);
+                if (jFilm.containsKey("rating") && jFilm.get("rating") != null) {
+                    film.setRating(new BigDecimal((String) jFilm.get("rating")));
                 }
-            }
-            if (jFilm.containsKey("roles") && jFilm.get("roles") != null) {
-                JSONArray roles = (JSONArray) jFilm.get("roles");
-                if (!roles.isEmpty())
-                    addRoleToAJoue(roles, film);
+                if (jFilm.containsKey("url") && jFilm.get("url") != null) {
+                    film.setUrl((String) jFilm.get("url"));
+                }
+                if (jFilm.containsKey("lieuTournage") && jFilm.get("lieuTournage") != null) {
+                    Lieu lieu = convertLieu((JSONObject) jFilm.get("lieuTournage"));
+                    film.setLieu(lieu);
+                }
+                if (jFilm.containsKey("genres") && jFilm.get("genres") != null) {
+                    Set<Genre> genres = convertGenres((JSONArray) jFilm.get("genres"));
+                    film.setGenres(genres);
+                }
+                if (jFilm.containsKey("langue") && jFilm.get("langue") != null) {
+                    Langue langue = getLangue(jFilm.get("langue").toString());
+                    film.setLangue(langue);
+                }
+                if (jFilm.containsKey("plot") && jFilm.get("plot") != null) {
+                    film.setResume(jFilm.get("plot").toString());
+                }
+                if (jFilm.containsKey("pays") && jFilm.get("pays") != null) {
+                    JSONObject jPays = (JSONObject) jFilm.get("pays");
+                    if (jPays.containsKey("nom") && jPays.get("nom") != null) {
+                        Pays pays = paysService.add(jPays.get("nom").toString());
+                        film.setPays(pays);
+                    }
+                }
+                if (jFilm.containsKey("realisateurs") && jFilm.get("realisateurs") != null) {
+                    JSONArray realisateurs = (JSONArray) jFilm.get("realisateurs");
+                    if (realisateurs.size() > 0) {
+                        Set<Realisateur> realisateurList = convertRealisateurs(realisateurs);
+                        film.setRealisateurs(realisateurList);
+                    }
+                }
+                filmService.add(film);
+                if (jFilm.containsKey("castingPrincipal") && jFilm.get("castingPrincipal") != null) {
+                    JSONArray castingPrincipal = (JSONArray) jFilm.get("castingPrincipal");
+                    if (castingPrincipal.size() > 0) {
+                        Set<Acteur> acteursList = convertActeurs(castingPrincipal);
+                        Set<AJoue> ajoueList = (Set<AJoue>) addActingPeople(acteursList, film);
+                        film.setaJoues(ajoueList);
+                    }
+                }
+                if (jFilm.containsKey("roles") && jFilm.get("roles") != null) {
+                    JSONArray roles = (JSONArray) jFilm.get("roles");
+                    if (!roles.isEmpty())
+                        addRoleToAJoue(roles, film);
+                }
             }
         }
     }
@@ -136,6 +140,8 @@ public class ManageFile {
         acteursList.forEach(acteur -> {
             System.out.println("idFilm" + film.getIdFilm());
             AJoue ajoue = new AJoue(acteur, film);
+            AJoueId aJoueId = new AJoueId(film.getIdFilm(), acteur.getIdPersonne());
+            ajoue.setId(aJoueId);
             aJoueService.add(ajoue);
             ajoueList.add(ajoue);
         });

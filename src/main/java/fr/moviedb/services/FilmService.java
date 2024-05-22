@@ -13,6 +13,10 @@ public class FilmService {
         return filmRepository.save(film);
     }
 
+    public Film find(String id) {
+        return filmRepository.findById(id);
+    }
+
     public Set<Film> findByActors(String actorName1, String actorName2) {
         return filmRepository.findByActors(actorName1, actorName2);
     }

@@ -1,5 +1,6 @@
 package fr.moviedb.repository;
 
+import fr.moviedb.entities.EtatDpt;
 import fr.moviedb.entities.Film;
 import fr.moviedb.utils.ConnectionEntityManager;
 import jakarta.persistence.EntityManager;
@@ -18,6 +19,10 @@ public class FilmRepository {
         em.persist(film);
         transaction.commit();
         return film;
+    }
+
+    public Film findById(String id){
+        return em.find(Film.class, id);
     }
 
     public Set<Film> findByActors(String actorName1, String actorName2) {

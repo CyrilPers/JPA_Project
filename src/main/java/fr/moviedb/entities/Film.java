@@ -25,7 +25,7 @@ public class Film {
     @Column(name = "url", length = 50)
     private String url;
 
-    @Column(name = "resume", length = 250)
+    @Column(name = "resume", length = 500)
     private String resume;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -62,6 +62,7 @@ public class Film {
 
     public Film() {
     }
+
 
 
     public Set<AJoue> getaJoues() {

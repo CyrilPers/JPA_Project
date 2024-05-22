@@ -16,6 +16,15 @@ public class AJoueId implements Serializable {
     @Column(name = "id_personne", nullable = false, length = 50)
     private String idPersonne;
 
+    public AJoueId(String idFilm, String idPersonne) {
+        this.idFilm = idFilm;
+        this.idPersonne = idPersonne;
+    }
+
+    public AJoueId() {
+
+
+    }
     public String getIdFilm() {
         return idFilm;
     }
