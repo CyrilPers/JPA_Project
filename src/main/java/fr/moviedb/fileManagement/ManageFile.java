@@ -10,7 +10,6 @@ import org.json.simple.parser.ParseException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -69,8 +68,9 @@ public class ManageFile {
             }
             if (jFilm.containsKey("pays") && jFilm.get("pays") != null) {
                 JSONObject jPays = (JSONObject) jFilm.get("pays");
-                if (jPays.containsKey("nom") && jPays.get("pays") != null) {
-                    paysService.add(jPays.get("pays").toString());
+                if (jPays.containsKey("nom") && jPays.get("nom") != null) {
+                    Pays pays = paysService.add(jPays.get("nom").toString());
+                    film.setPays(pays);
                 }
             }
             if (jFilm.containsKey("realisateurs") && jFilm.get("realisateurs") != null){
@@ -80,6 +80,7 @@ public class ManageFile {
                     film.setRealisateurs(realisateurList);
                 }
             }
+            filmService.add(film);
             if (jFilm.containsKey("castingPrincipal") && jFilm.get("castingPrincipal") != null) {
                 JSONArray castingPrincipal = (JSONArray) jFilm.get("castingPrincipal");
                 if (castingPrincipal.size() > 0) {
@@ -92,9 +93,7 @@ public class ManageFile {
                 JSONArray roles = (JSONArray) jFilm.get("roles");
                 if (!roles.isEmpty())
                     addRoleToAJoue(roles, film);
-
             }
-            filmService.add(film);
         }
     }
 
@@ -135,6 +134,7 @@ public class ManageFile {
     private AJoue addActingPeople(Set<Acteur> acteursList, Film film) {
         Set<AJoue> ajoueList = new HashSet<>();
         acteursList.forEach(acteur -> {
+            System.out.println("idFilm" + film.getIdFilm());
             AJoue ajoue = new AJoue(acteur, film);
             aJoueService.add(ajoue);
             ajoueList.add(ajoue);
@@ -171,12 +171,16 @@ public class ManageFile {
                     if (jActeur.containsKey("naissance")) {
                         JSONObject naissance = (JSONObject) jActeur.get("naissance");
                         if (naissance.containsKey("dateNaissance")) {
-                            // TODO CONVERT STRING DATE
-                            acteur.setDateNaissance(new Date(jActeur.get("naissance").toString()));
+                            if (!naissance.get("dateNaissance").toString().isBlank()) {
+                                acteur.setDateNaissance(new Date(naissance.get("dateNaissance").toString()));
+                            }
                         }
-                        if (naissance.containsKey("lieuNaissance")) {
-                            Lieu lieu = convertLieuNaissance(naissance.get("lieuNaissance").toString());
-                            acteur.setLieu(lieu);
+                        if (naissance.containsKey("lieuNaissance") && naissance.get("lieuNaissance") != null) {
+                            if (!naissance.get("lieuNaissance").toString().isBlank()) {
+                                Lieu lieuNaissance = convertLieuNaissance(naissance.get("lieuNaissance").toString());
+                                lieuService.add(lieuNaissance);
+                                acteur.setLieu(lieuNaissance);
+                            }
                         }
                     }
                     acteurService.add(acteur);
@@ -220,7 +224,6 @@ public class ManageFile {
                             if (!naissance.get("lieuNaissance").toString().isBlank()) {
                                 Lieu lieu = convertLieuNaissance(naissance.get("lieuNaissance").toString());
                                 realisateur.setLieu(lieu);
-
                             }
                         }
                     }
@@ -250,9 +253,16 @@ public class ManageFile {
     private Lieu convertLieuNaissance(String lieuNaissance) {
         String[] lieuElements = lieuNaissance.split(",");
         Ville ville = villeService.add(lieuElements[0]);
-        EtatDpt etatDpt = etatDptService.add(lieuElements[1]);
-        Pays pays = paysService.add(lieuElements[2]);
-        Lieu lieu = new Lieu(ville, etatDpt, pays);
+        Lieu lieu;
+        if (lieuElements.length < 3) {
+            Pays pays = paysService.add(lieuElements[1]);
+            lieu = new Lieu(ville, pays);
+        } else {
+            EtatDpt etatDpt = etatDptService.add(lieuElements[1]);
+            Pays pays = paysService.add(lieuElements[2]);
+            lieu = new Lieu(ville, etatDpt, pays);
+        }
+        lieuService.add(lieu);
         return lieu;
     }
 

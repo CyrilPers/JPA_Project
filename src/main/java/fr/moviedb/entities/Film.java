@@ -16,7 +16,7 @@ public class Film {
     @Column(name = "nom", length = 50)
     private String nom;
 
-    @Column(name = "`année`")
+    @Column(name = "`annee`")
     private Integer annee;
 
     @Column(name = "rating", precision = 2, scale = 1)
