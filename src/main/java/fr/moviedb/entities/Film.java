@@ -40,10 +40,6 @@ public class Film {
     @JoinColumn(name = "id_langue", nullable = false)
     private Langue langue;
 
-    @OneToMany(mappedBy = "film")
-    private Set<AJoue> aJoues = new HashSet<>();
-
-
     @ManyToMany
     @JoinTable(
             name = "asso_2",
@@ -60,18 +56,48 @@ public class Film {
     )
     private Set<Realisateur> realisateurs = new HashSet<>();
 
+    @ManyToMany
+    @JoinTable(name = "asso_12",
+            inverseJoinColumns = @JoinColumn(name = "id_role"),
+            joinColumns = @JoinColumn(name = "id_film"))
+    private Set<Role> roles = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(name = "asso_13_1",
+            inverseJoinColumns = @JoinColumn(name = "id_personne"),
+            joinColumns = @JoinColumn(name = "id_film"))
+    private Set<Acteur> acteurs = new HashSet<>();
+
     public Film() {
     }
 
 
-
-    public Set<AJoue> getaJoues() {
-        return aJoues;
+    public Set<Acteur> getActeurs() {
+        return acteurs;
     }
 
-    public void setaJoues(Set<AJoue> aJoues) {
-        this.aJoues = aJoues;
+    public void setActeurs(Set<Acteur> acteurs) {
+        this.acteurs = acteurs;
     }
+
+    public void setSingleActeur(Acteur acteur) {
+        this.acteurs.clear();
+        this.acteurs.add(acteur);
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
+    public void setSingleRole(Role role) {
+        this.roles.clear();
+        this.roles.add(role);
+    }
+
 
     public Set<Realisateur> getRealisateurs() {
         return realisateurs;

@@ -13,8 +13,11 @@ public class Acteur extends Personne{
     @Column(name = "taille", precision = 4, scale = 2)
     private BigDecimal taille;
 
-    @OneToMany(mappedBy = "acteur")
-    private Set<AJoue> aJoues = new HashSet<>();
+    @ManyToMany
+    @JoinTable(name = "asso_11",
+            inverseJoinColumns = @JoinColumn(name = "id_role"),
+            joinColumns = @JoinColumn(name = "id_personne"))
+    private Set<Role> roles = new HashSet<>();
 
     public BigDecimal getTaille() {
         return taille;
@@ -24,12 +27,18 @@ public class Acteur extends Personne{
         this.taille = taille;
     }
 
-    public Set<AJoue> getAJoues() {
-        return aJoues;
+
+    public Set<Role> getRoles() {
+        return roles;
     }
 
-    public void setAJoues(Set<AJoue> aJoues) {
-        this.aJoues = aJoues;
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
+    public void setSingleRole(Role role) {
+        this.roles.clear();
+        this.roles.add(role);
     }
 
     @Override

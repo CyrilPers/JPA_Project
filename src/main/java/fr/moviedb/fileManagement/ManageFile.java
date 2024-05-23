@@ -2,6 +2,8 @@ package fr.moviedb.fileManagement;
 
 import fr.moviedb.entities.*;
 import fr.moviedb.services.*;
+import fr.moviedb.utils.ConnectionEntityManager;
+import fr.moviedb.utils.ServiceGetter;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -18,16 +20,16 @@ import java.util.Set;
 
 public class ManageFile {
 
-    private final VilleService villeService = new VilleService();
-    private final PaysService paysService = new PaysService();
-    private final AJoueService aJoueService = new AJoueService();
-    private final ActeurService acteurService = new ActeurService();
-    private final RealisateurService realisateurService = new RealisateurService();
-    private final LangueService langueService = new LangueService();
-    private final EtatDptService etatDptService = new EtatDptService();
-    private final LieuService lieuService = new LieuService();
-    private final GenreService genreService = new GenreService();
-    private final FilmService filmService = new FilmService();
+    private final VilleService villeService = ServiceGetter.getVilleService();
+    private final PaysService paysService = ServiceGetter.getPaysService();
+    private final ActeurService acteurService = ServiceGetter.getActeurService();
+    private final RealisateurService realisateurService = ServiceGetter.getRealisateurService();
+    private final LangueService langueService = ServiceGetter.getLangueService();
+    private final EtatDptService etatDptService = ServiceGetter.getEtatDptService();
+    private final LieuService lieuService = ServiceGetter.getLieuService();
+    private final GenreService genreService = ServiceGetter.getGenreService();
+    private final FilmService filmService = ServiceGetter.getFilmService();
+    private final RoleService roleService = ServiceGetter.getRoleService();
 
     public void parseToDb() throws IOException, ParseException {
         String filePath = "src/main/resources/files/films.json";
@@ -46,7 +48,9 @@ public class ManageFile {
                 }
 
                 if (jFilm.containsKey("anneeSortie") && jFilm.get("anneeSortie") != null) {
-                    film.setAnnee(Integer.parseInt((String) jFilm.get("anneeSortie")));
+                    String anneeSortie = jFilm.get("anneeSortie").toString();
+                    String YearSortie = anneeSortie.substring(0, 4);
+                    film.setAnnee(Integer.parseInt(YearSortie));
                 }
                 if (jFilm.containsKey("rating") && jFilm.get("rating") != null) {
                     film.setRating(new BigDecimal((String) jFilm.get("rating")));
@@ -88,64 +92,51 @@ public class ManageFile {
                     JSONArray castingPrincipal = (JSONArray) jFilm.get("castingPrincipal");
                     if (castingPrincipal.size() > 0) {
                         Set<Acteur> acteursList = convertActeurs(castingPrincipal);
-                        Set<AJoue> ajoueList = (Set<AJoue>) addActingPeople(acteursList, film);
-                        film.setaJoues(ajoueList);
+                        film.setActeurs(acteursList);
                     }
                 }
                 if (jFilm.containsKey("roles") && jFilm.get("roles") != null) {
                     JSONArray roles = (JSONArray) jFilm.get("roles");
-                    if (!roles.isEmpty())
-                        addRoleToAJoue(roles, film);
+                    if (!roles.isEmpty()) {
+                        Set<Role> filmRoles = createRole(roles, film);
+                        film.setRoles(filmRoles);
+                    }
                 }
             }
         }
+        ConnectionEntityManager.closeEM();
+        System.out.println("COPIE EN BDD TERMINEE !");
     }
 
-    /**
-     * @param roles
-     * @param film
-     */
-    private void addRoleToAJoue(JSONArray roles, Film film) {
+    private Set<Role> createRole(JSONArray roles, Film film) {
         Iterator<JSONObject> iterator = roles.iterator();
+        Set<Role> roleList = new HashSet<>();
         while (iterator.hasNext()) {
-            String acteurId = null;
-            String charactereName = null;
+            Acteur acteur = null;
+            Role role = new Role();
+            Set<Film> films = new HashSet<>();
+            films.add(film);
+            Set<Acteur> acteurs = new HashSet<>();
             JSONObject jRole = iterator.next();
             if (jRole.containsKey("acteur")) {
                 JSONObject jActeur = (JSONObject) jRole.get("acteur");
-                if (jActeur.containsKey("id")) {
-                    acteurId = jActeur.get("id").toString();
+                if (jActeur.containsKey("id") && jActeur.get("id") != null) {
+                    acteur = acteurService.findById(jActeur.get("id").toString());
+                    if (acteur == null) {
+                        acteur = convertActeur(jActeur);
+                    }
                 }
             }
-            if (jRole.containsKey("characterName")) {
-                charactereName = jRole.get("charactereName").toString();
+            if (jRole.containsKey("charactere") && jRole.get("charactere") != null) {
+                role.setPersonnage(jRole.get("charactere").toString());
             }
-            if (acteurId != null) {
-                AJoue aJoueFound = aJoueService.findAjoueByFilmAndActeur(acteurId, film.getIdFilm());
-                if (aJoueFound != null && charactereName != null) {
-                    aJoueFound.setPersonnage(charactereName);
-                    aJoueService.add(aJoueFound);
-                }
-            }
+            acteurs.add(acteur);
+            role.setFilms(films);
+            role.setActeurs(acteurs);
+            roleService.add(role);
+            roleList.add(role);
         }
-    }
-
-    /**
-     * @param acteursList
-     * @param film
-     * @return
-     */
-    private AJoue addActingPeople(Set<Acteur> acteursList, Film film) {
-        Set<AJoue> ajoueList = new HashSet<>();
-        acteursList.forEach(acteur -> {
-            System.out.println("idFilm" + film.getIdFilm());
-            AJoue ajoue = new AJoue(acteur, film);
-            AJoueId aJoueId = new AJoueId(film.getIdFilm(), acteur.getIdPersonne());
-            ajoue.setId(aJoueId);
-            aJoueService.add(ajoue);
-            ajoueList.add(ajoue);
-        });
-        return (AJoue) ajoueList;
+        return roleList;
     }
 
     /**
@@ -162,39 +153,44 @@ public class ManageFile {
                 if (acteurFound != null) {
                     acteurList.add(acteurFound);
                 } else {
-                    Acteur acteur = new Acteur();
-                    acteur.setIdPersonne(jActeur.get("id").toString());
-                    if (jActeur.containsKey("identite")) {
-                        acteur.setIdentite(jActeur.get("identite").toString());
-                    }
-                    if (jActeur.containsKey("url")) {
-                        acteur.setUrl((String) jActeur.get("url"));
-                    }
-                    if (jActeur.containsKey("height")) {
-                        String numericPart = jActeur.get("height").toString().replace(" m", "").trim();
-                        acteur.setTaille(new BigDecimal(numericPart));
-                    }
-                    if (jActeur.containsKey("naissance")) {
-                        JSONObject naissance = (JSONObject) jActeur.get("naissance");
-                        if (naissance.containsKey("dateNaissance")) {
-                            if (!naissance.get("dateNaissance").toString().isBlank()) {
-                                acteur.setDateNaissance(new Date(naissance.get("dateNaissance").toString()));
-                            }
-                        }
-                        if (naissance.containsKey("lieuNaissance") && naissance.get("lieuNaissance") != null) {
-                            if (!naissance.get("lieuNaissance").toString().isBlank()) {
-                                Lieu lieuNaissance = convertLieuNaissance(naissance.get("lieuNaissance").toString());
-                                lieuService.add(lieuNaissance);
-                                acteur.setLieu(lieuNaissance);
-                            }
-                        }
-                    }
+                    Acteur acteur = convertActeur(jActeur);
                     acteurService.add(acteur);
                     acteurList.add(acteur);
                 }
             }
         }
         return acteurList;
+    }
+
+    private Acteur convertActeur(JSONObject jActeur) {
+        Acteur acteur = new Acteur();
+        acteur.setIdPersonne(jActeur.get("id").toString());
+        if (jActeur.containsKey("identite")) {
+            acteur.setIdentite(jActeur.get("identite").toString());
+        }
+        if (jActeur.containsKey("url")) {
+            acteur.setUrl((String) jActeur.get("url"));
+        }
+        if (jActeur.containsKey("height")) {
+            String numericPart = jActeur.get("height").toString().replace(" m", "").trim();
+            acteur.setTaille(new BigDecimal(numericPart));
+        }
+        if (jActeur.containsKey("naissance")) {
+            JSONObject naissance = (JSONObject) jActeur.get("naissance");
+            if (naissance.containsKey("dateNaissance")) {
+                if (!naissance.get("dateNaissance").toString().isBlank()) {
+                    acteur.setDateNaissance(new Date(naissance.get("dateNaissance").toString()));
+                }
+            }
+            if (naissance.containsKey("lieuNaissance") && naissance.get("lieuNaissance") != null) {
+                if (!naissance.get("lieuNaissance").toString().isBlank()) {
+                    Lieu lieuNaissance = convertLieuNaissance(naissance.get("lieuNaissance").toString());
+                    lieuService.add(lieuNaissance);
+                    acteur.setLieu(lieuNaissance);
+                }
+            }
+        }
+        return acteur;
     }
 
     /**
