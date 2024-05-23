@@ -9,10 +9,10 @@ public class ConnectionEntityManager {
     private static EntityManager em;
 
     public static EntityManagerFactory getEmf() {
-        if (emf !=null)
+        if (emf != null)
             return emf;
         return Persistence.createEntityManagerFactory("movie_db");
-        }
+    }
 
 
     public static EntityManager getEm() {
