@@ -13,7 +13,10 @@ public class Acteur extends Personne{
     @Column(name = "taille", precision = 4, scale = 2)
     private BigDecimal taille;
 
-    @ManyToMany(mappedBy="acteurs")
+    @ManyToMany
+    @JoinTable(name = "asso_11",
+            inverseJoinColumns = @JoinColumn(name = "id_personne"),
+            joinColumns = @JoinColumn(name = "id_role"))
     private Set<Role> roles = new HashSet<>();
 
     public BigDecimal getTaille() {
