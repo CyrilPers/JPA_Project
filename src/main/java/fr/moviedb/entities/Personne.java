@@ -27,7 +27,7 @@ public abstract class Personne {
     @Column(name = "url", length = 50)
     private String url;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_lieu")
     private Lieu lieu;
 
