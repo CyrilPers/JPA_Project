@@ -127,8 +127,8 @@ public class ManageFile {
                     }
                 }
             }
-            if (jRole.containsKey("charactere") && jRole.get("charactere") != null) {
-                role.setPersonnage(jRole.get("charactere").toString());
+            if (jRole.containsKey("characterName") && jRole.get("characterName") != null) {
+                role.setPersonnage(jRole.get("characterName").toString());
             }
             acteurs.add(acteur);
             role.setFilms(films);
