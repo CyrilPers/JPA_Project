@@ -131,11 +131,13 @@ public class ManageFile {
             }
             role = roleService.findRoleWithoutPersonnage(film, acteur);
             if (role == null) {
+                System.out.println("role null");
                 role = new Role();
                 role.setSingleFilm(film);
                 role.setSingleActeur(acteur);
             }
             if (jRole.containsKey("characterName") && jRole.get("characterName") != null) {
+                System.out.println("set personnage" + jRole.get("characterName").toString() );
                 role.setPersonnage(jRole.get("characterName").toString());
             }
             roleService.add(role);

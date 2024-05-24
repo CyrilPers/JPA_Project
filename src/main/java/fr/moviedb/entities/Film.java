@@ -28,16 +28,16 @@ public class Film {
     @Column(name = "resume", length = 500)
     private String resume;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "pays", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "pays")
     private Pays pays;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_lieu")
     private Lieu lieu;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id_langue", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_langue")
     private Langue langue;
 
     @ManyToMany
