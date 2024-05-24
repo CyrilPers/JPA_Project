@@ -36,6 +36,16 @@ public class Role {
         return films;
     }
 
+    public void setSingleFilm(Film film) {
+        this.films.clear();
+        this.films.add(film);
+    }
+
+    public void setSingleActeur(Acteur acteur) {
+        this.acteurs.clear();
+        this.acteurs.add(acteur);
+    }
+
     public void setFilms(Set<Film> films) {
         this.films = films;
     }

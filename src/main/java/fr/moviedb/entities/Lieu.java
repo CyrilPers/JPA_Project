@@ -47,6 +47,10 @@ public class Lieu {
         this.pays = pays;
     }
 
+    public Lieu(Pays pays) {
+        this.pays = pays;
+    }
+
     public Integer getId() {
         return id;
     }

@@ -10,7 +10,7 @@ import java.util.Set;
 @Table(name = "film")
 public class Film {
     @Id
-    @Column(name = "id_film", insertable=false, updatable=false, nullable = false, length = 50)
+    @Column(name = "id_film", nullable = false, length = 50)
     private String idFilm;
 
     @Column(name = "nom", length = 50)
@@ -58,31 +58,12 @@ public class Film {
 
     @ManyToMany
     @JoinTable(name = "asso_12",
-            inverseJoinColumns = @JoinColumn(name = "id_film"),
-            joinColumns = @JoinColumn(name = "id_role"))
+            joinColumns = @JoinColumn(name = "id_film"),
+            inverseJoinColumns = @JoinColumn(name = "id_role"))
     private Set<Role> roles = new HashSet<>();
 
-    @ManyToMany
-    @JoinTable(name = "asso_13_1",
-            inverseJoinColumns = @JoinColumn(name = "id_film"),
-            joinColumns = @JoinColumn(name = "id_film"))
-    private Set<Acteur> acteurs = new HashSet<>();
 
     public Film() {
-    }
-
-
-    public Set<Acteur> getActeurs() {
-        return acteurs;
-    }
-
-    public void setActeurs(Set<Acteur> acteurs) {
-        this.acteurs = acteurs;
-    }
-
-    public void setSingleActeur(Acteur acteur) {
-        this.acteurs.clear();
-        this.acteurs.add(acteur);
     }
 
     public Set<Role> getRoles() {

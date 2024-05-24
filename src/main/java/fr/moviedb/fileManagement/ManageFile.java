@@ -12,10 +12,8 @@ import org.json.simple.parser.ParseException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 
 public class ManageFile {
@@ -31,7 +29,7 @@ public class ManageFile {
     private final FilmService filmService = ServiceGetter.getFilmService();
     private final RoleService roleService = ServiceGetter.getRoleService();
 
-    public void parseToDb() throws IOException, ParseException {
+    public void parseToDb() throws IOException, ParseException, java.text.ParseException {
         String filePath = "src/main/resources/files/films.json";
         JSONParser parser = new JSONParser();
         Object object = parser.parse(new FileReader(filePath));
@@ -91,8 +89,15 @@ public class ManageFile {
                 if (jFilm.containsKey("castingPrincipal") && jFilm.get("castingPrincipal") != null) {
                     JSONArray castingPrincipal = (JSONArray) jFilm.get("castingPrincipal");
                     if (castingPrincipal.size() > 0) {
+                        Set<Role> roles = new HashSet<>();
                         Set<Acteur> acteursList = convertActeurs(castingPrincipal);
-                        film.setActeurs(acteursList);
+                        acteursList.forEach(act -> {
+                            Role role = new Role();
+                            role.setSingleActeur(act);
+                            role.setSingleFilm(film);
+                            roleService.add(role);
+                        });
+                        film.setRoles(roles);
                     }
                 }
                 if (jFilm.containsKey("roles") && jFilm.get("roles") != null) {
@@ -108,15 +113,12 @@ public class ManageFile {
         System.out.println("COPIE EN BDD TERMINEE !");
     }
 
-    private Set<Role> createRole(JSONArray roles, Film film) {
+    private Set<Role> createRole(JSONArray roles, Film film) throws java.text.ParseException {
         Iterator<JSONObject> iterator = roles.iterator();
         Set<Role> roleList = new HashSet<>();
         while (iterator.hasNext()) {
             Acteur acteur = null;
-            Role role = new Role();
-            Set<Film> films = new HashSet<>();
-            films.add(film);
-            Set<Acteur> acteurs = new HashSet<>();
+            Role role = null;
             JSONObject jRole = iterator.next();
             if (jRole.containsKey("acteur")) {
                 JSONObject jActeur = (JSONObject) jRole.get("acteur");
@@ -127,12 +129,15 @@ public class ManageFile {
                     }
                 }
             }
+            role = roleService.findRoleWithoutPersonnage(film, acteur);
+            if (role == null) {
+                role = new Role();
+                role.setSingleFilm(film);
+                role.setSingleActeur(acteur);
+            }
             if (jRole.containsKey("characterName") && jRole.get("characterName") != null) {
                 role.setPersonnage(jRole.get("characterName").toString());
             }
-            acteurs.add(acteur);
-            role.setFilms(films);
-            role.setActeurs(acteurs);
             roleService.add(role);
             roleList.add(role);
         }
@@ -143,7 +148,7 @@ public class ManageFile {
      * @param castingPrincipal
      * @return
      */
-    private Set<Acteur> convertActeurs(JSONArray castingPrincipal) {
+    private Set<Acteur> convertActeurs(JSONArray castingPrincipal) throws java.text.ParseException {
         Iterator<JSONObject> iterator = castingPrincipal.iterator();
         Set<Acteur> acteurList = new HashSet<>();
         while (iterator.hasNext()) {
@@ -162,7 +167,7 @@ public class ManageFile {
         return acteurList;
     }
 
-    private Acteur convertActeur(JSONObject jActeur) {
+    private Acteur convertActeur(JSONObject jActeur) throws java.text.ParseException {
         Acteur acteur = new Acteur();
         acteur.setIdPersonne(jActeur.get("id").toString());
         if (jActeur.containsKey("identite")) {
@@ -179,7 +184,8 @@ public class ManageFile {
             JSONObject naissance = (JSONObject) jActeur.get("naissance");
             if (naissance.containsKey("dateNaissance")) {
                 if (!naissance.get("dateNaissance").toString().isBlank()) {
-                    acteur.setDateNaissance(new Date(naissance.get("dateNaissance").toString()));
+                    Date date = convertToDate(naissance.get("dateNaissance").toString());
+                    acteur.setDateNaissance(date);
                 }
             }
             if (naissance.containsKey("lieuNaissance") && naissance.get("lieuNaissance") != null) {
@@ -197,7 +203,7 @@ public class ManageFile {
      * @param realisateurs
      * @return
      */
-    private Set<Realisateur> convertRealisateurs(JSONArray realisateurs) {
+    private Set<Realisateur> convertRealisateurs(JSONArray realisateurs) throws java.text.ParseException {
         Iterator<JSONObject> iterator = realisateurs.iterator();
         Set<Realisateur> realisateurList = new HashSet<>();
         while (iterator.hasNext()) {
@@ -219,7 +225,8 @@ public class ManageFile {
                         JSONObject naissance = (JSONObject) jRealisateur.get("naissance");
                         if (naissance.containsKey("dateNaissance") && naissance.get("dateNaissance") != null) {
                             if (!naissance.get("dateNaissance").toString().isBlank()) {
-                                realisateur.setDateNaissance(new Date(naissance.get("dateNaissance").toString()));
+                                Date date = convertToDate(naissance.get("dateNaissance").toString());
+                                realisateur.setDateNaissance(date);
                             }
                         }
                         if (naissance.containsKey("lieuNaissance") && naissance.get("lieuNaissance") != null) {
@@ -254,12 +261,18 @@ public class ManageFile {
      */
     private Lieu convertLieuNaissance(String lieuNaissance) {
         String[] lieuElements = lieuNaissance.split(",");
-        Ville ville = villeService.add(lieuElements[0]);
+
         Lieu lieu;
-        if (lieuElements.length < 3) {
+        if (lieuElements.length < 2) {
+            Pays pays = paysService.add(lieuElements[0]);
+            lieu = new Lieu(pays);
+        }
+        else if (lieuElements.length < 3) {
+            Ville ville = villeService.add(lieuElements[0]);
             Pays pays = paysService.add(lieuElements[1]);
             lieu = new Lieu(ville, pays);
         } else {
+            Ville ville = villeService.add(lieuElements[0]);
             EtatDpt etatDpt = etatDptService.add(lieuElements[1]);
             Pays pays = paysService.add(lieuElements[2]);
             lieu = new Lieu(ville, etatDpt, pays);
@@ -301,5 +314,12 @@ public class ManageFile {
             genres.add(genre);
         }
         return genres;
+    }
+
+
+    private Date convertToDate(String dateNaissance) throws java.text.ParseException {
+        dateNaissance = dateNaissance.trim();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM dd yyyy", Locale.ENGLISH);
+        return dateFormat.parse(dateNaissance);
     }
 }

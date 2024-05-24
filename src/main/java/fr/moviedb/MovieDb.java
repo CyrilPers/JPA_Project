@@ -14,6 +14,8 @@ public class MovieDb {
             throw new RuntimeException(e);
         } catch (ParseException e) {
             throw new RuntimeException(e);
+        } catch (java.text.ParseException e) {
+            throw new RuntimeException(e);
         }
     }
 }
