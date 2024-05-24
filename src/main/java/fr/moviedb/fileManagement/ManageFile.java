@@ -131,7 +131,6 @@ public class ManageFile {
             }
             role = roleService.findRoleWithoutPersonnage(film, acteur);
             if (role == null) {
-                System.out.println("role null");
                 role = new Role();
                 role.setSingleFilm(film);
                 role.setSingleActeur(acteur);
@@ -140,6 +139,7 @@ public class ManageFile {
                 System.out.println("set personnage" + jRole.get("characterName").toString() );
                 role.setPersonnage(jRole.get("characterName").toString());
             }
+            System.out.println("roleperso" + role.getPersonnage());
             roleService.add(role);
             roleList.add(role);
         }
@@ -227,8 +227,12 @@ public class ManageFile {
                         JSONObject naissance = (JSONObject) jRealisateur.get("naissance");
                         if (naissance.containsKey("dateNaissance") && naissance.get("dateNaissance") != null) {
                             if (!naissance.get("dateNaissance").toString().isBlank()) {
-                                Date date = convertToDate(naissance.get("dateNaissance").toString());
-                                realisateur.setDateNaissance(date);
+                                try {
+                                    Date date = convertToDate(naissance.get("dateNaissance").toString());
+                                    realisateur.setDateNaissance(date);
+                                } catch (java.text.ParseException e) {
+                                    throw new RuntimeException(e);
+                                }
                             }
                         }
                         if (naissance.containsKey("lieuNaissance") && naissance.get("lieuNaissance") != null) {
