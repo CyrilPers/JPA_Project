@@ -1,6 +1,5 @@
 package fr.moviedb.repository;
 
-import fr.moviedb.entities.EtatDpt;
 import fr.moviedb.entities.Film;
 import fr.moviedb.utils.ConnectionEntityManager;
 import jakarta.persistence.EntityManager;

@@ -40,6 +40,7 @@ public class ManageFile {
             Film film = new Film();
             boolean saveFilm = filmService.find(jFilm.get("id").toString()) == null ? true : false;
             while (saveFilm) {
+                System.out.println("PAS TROUVE " + jFilm.get("id").toString());
                 film.setIdFilm(jFilm.get("id").toString());
                 if (jFilm.containsKey("nom") && jFilm.get("nom") != null && !jFilm.get("nom").toString().isBlank()) {
                     film.setNom(jFilm.get("nom").toString());
@@ -51,7 +52,10 @@ public class ManageFile {
                     film.setAnnee(Integer.parseInt(YearSortie));
                 }
                 if (jFilm.containsKey("rating") && jFilm.get("rating") != null) {
-                    film.setRating(new BigDecimal((String) jFilm.get("rating")));
+                    if (!jFilm.get("rating").toString().isBlank()) {
+                        System.out.println(jFilm.get("rating").toString());
+                        film.setRating(new BigDecimal(jFilm.get("rating").toString()));
+                    }
                 }
                 if (jFilm.containsKey("url") && jFilm.get("url") != null) {
                     film.setUrl((String) jFilm.get("url"));
@@ -107,6 +111,7 @@ public class ManageFile {
                         film.setRoles(filmRoles);
                     }
                 }
+                saveFilm = false;
             }
         }
         ConnectionEntityManager.closeEM();
@@ -117,9 +122,9 @@ public class ManageFile {
         Iterator<JSONObject> iterator = roles.iterator();
         Set<Role> roleList = new HashSet<>();
         while (iterator.hasNext()) {
+            JSONObject jRole = iterator.next();
             Acteur acteur = null;
             Role role = null;
-            JSONObject jRole = iterator.next();
             if (jRole.containsKey("acteur")) {
                 JSONObject jActeur = (JSONObject) jRole.get("acteur");
                 if (jActeur.containsKey("id") && jActeur.get("id") != null) {
@@ -136,10 +141,8 @@ public class ManageFile {
                 role.setSingleActeur(acteur);
             }
             if (jRole.containsKey("characterName") && jRole.get("characterName") != null) {
-                System.out.println("set personnage" + jRole.get("characterName").toString() );
                 role.setPersonnage(jRole.get("characterName").toString());
             }
-            System.out.println("roleperso" + role.getPersonnage());
             roleService.add(role);
             roleList.add(role);
         }
@@ -179,7 +182,7 @@ public class ManageFile {
             acteur.setUrl((String) jActeur.get("url"));
         }
         if (jActeur.containsKey("height")) {
-            String numericPart = jActeur.get("height").toString().replace(" m", "").trim();
+            String numericPart = jActeur.get("height").toString().replace("m", "").trim();
             acteur.setTaille(new BigDecimal(numericPart));
         }
         if (jActeur.containsKey("naissance")) {
@@ -272,8 +275,7 @@ public class ManageFile {
         if (lieuElements.length < 2) {
             Pays pays = paysService.add(lieuElements[0]);
             lieu = new Lieu(pays);
-        }
-        else if (lieuElements.length < 3) {
+        } else if (lieuElements.length < 3) {
             Ville ville = villeService.add(lieuElements[0]);
             Pays pays = paysService.add(lieuElements[1]);
             lieu = new Lieu(ville, pays);
@@ -325,6 +327,14 @@ public class ManageFile {
 
     private Date convertToDate(String dateNaissance) throws java.text.ParseException {
         dateNaissance = dateNaissance.trim();
+        if (dateNaissance.split(" ").length < 2) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy", Locale.ENGLISH);
+            return dateFormat.parse(dateNaissance);
+        }
+        if (dateNaissance.split(" ").length < 3) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM yyyy", Locale.ENGLISH);
+            return dateFormat.parse(dateNaissance);
+        }
         SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM dd yyyy", Locale.ENGLISH);
         return dateFormat.parse(dateNaissance);
     }

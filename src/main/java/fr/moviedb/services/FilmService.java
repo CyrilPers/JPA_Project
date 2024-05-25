@@ -1,6 +1,7 @@
 package fr.moviedb.services;
 
 import fr.moviedb.entities.Film;
+import fr.moviedb.entities.Pays;
 import fr.moviedb.repository.FilmRepository;
 
 import java.util.Set;
@@ -14,7 +15,11 @@ public class FilmService {
     }
 
     public Film find(String id) {
-        return filmRepository.findById(id);
+        Film filmFound = filmRepository.findById(id);
+        if (filmFound == null) {
+           return null;
+        }
+        return filmFound;
     }
 
     public Set<Film> findByActors(String actorName1, String actorName2) {
