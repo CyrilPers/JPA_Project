@@ -12,6 +12,10 @@ public class RoleRepository {
     private EntityTransaction transaction = em.getTransaction();
 
 
+    /**
+     * @param role
+     * @return
+     */
     public Role save(Role role) {
         transaction.begin();
         em.persist(role);
@@ -19,6 +23,11 @@ public class RoleRepository {
         return role;
     }
 
+    /**
+     * @param film
+     * @param acteur
+     * @return
+     */
     public Role findRoleWithoutPersonnage(Film film, Acteur acteur) {
         try {
             return em.createQuery("SELECT r FROM Role r " +
@@ -36,6 +45,10 @@ public class RoleRepository {
     }
 
 
+    /**
+     * @param role
+     * @return
+     */
     public Role find(Role role) {
        try {
            return em.find(Role.class, role.getId());

@@ -121,6 +121,12 @@ public class ManageFile {
         ConnectionEntityManager.closeEM();
     }
 
+    /**
+     * @param roles
+     * @param film
+     * @return
+     * @throws java.text.ParseException
+     */
     private Set<Role> createRole(JSONArray roles, Film film) throws java.text.ParseException {
         Iterator<JSONObject> iterator = roles.iterator();
         Set<Role> roleList = new HashSet<>();
@@ -187,6 +193,11 @@ public class ManageFile {
         return acteurList;
     }
 
+    /**
+     * @param jActeur
+     * @return
+     * @throws java.text.ParseException
+     */
     private Acteur convertActeur(JSONObject jActeur) throws java.text.ParseException {
         Acteur acteur = new Acteur();
         acteur.setIdPersonne(jActeur.get("id").toString());
@@ -352,6 +363,11 @@ public class ManageFile {
     }
 
 
+    /**
+     * @param dateNaissance
+     * @return
+     * @throws java.text.ParseException
+     */
     private Date convertToDate(String dateNaissance) throws java.text.ParseException {
         dateNaissance = dateNaissance.trim();
         if (dateNaissance.split(" ").length < 2) {
