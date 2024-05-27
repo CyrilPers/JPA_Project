@@ -5,6 +5,8 @@ import fr.moviedb.utils.ConnectionEntityManager;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class FilmRepository {
@@ -20,7 +22,7 @@ public class FilmRepository {
         return film;
     }
 
-    public Film findById(String id){
+    public Film findById(String id) {
         return em.find(Film.class, id);
     }
 
@@ -48,10 +50,10 @@ public class FilmRepository {
 
     public Set<Film> findByPeriodAndActor(int startYear, int endYear, String actorName) {
         return (Set<Film>) em.createQuery(
-                "SELECT f FROM Film f " +
-                        "JOIN f.roles r " +
-                        "JOIN r.acteurs a " +
-                        "WHERE a.identite LIKE :identite AND f.annee BETWEEN :year1 AND :year2", Film.class)
+                        "SELECT f FROM Film f " +
+                                "JOIN f.roles r " +
+                                "JOIN r.acteurs a " +
+                                "WHERE a.identite LIKE :identite AND f.annee BETWEEN :year1 AND :year2", Film.class)
                 .setParameter("year1", startYear)
                 .setParameter("year2", endYear)
                 .setParameter("identite", actorName)
@@ -59,13 +61,14 @@ public class FilmRepository {
                 .getResultList();
     }
 
-    public Set<Film> findByActor(String actorName) {
-        return (Set<Film>) em.createQuery(
+    public List<Film> findByActor(String actorName) {
+        return (List<Film>) em.createQuery(
                         "SELECT f FROM Film f " +
                                 "JOIN f.roles r " +
                                 "JOIN r.acteurs a " +
                                 "WHERE a.identite LIKE :identite", Film.class)
-                .setParameter("identite", actorName)
+                .setParameter("identite", "%" + actorName + "%")
                 .getResultList();
+
     }
 }

@@ -6,6 +6,7 @@ import fr.moviedb.services.ActeurService;
 import fr.moviedb.services.FilmService;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -116,7 +117,7 @@ public class SearchConsole {
     private static void displayCastingByMovie() {
         System.out.println("Veuillez indiquer le nom du film :");
         String movieName = scanner.nextLine();
-        Set<Acteur> acteurs = acteurService.findByMovie(movieName);
+        List<Acteur> acteurs = acteurService.findByMovie(movieName);
         if (acteurs.isEmpty()) {
             System.out.println("Aucun acteur trouvé");
         } else {
@@ -127,7 +128,7 @@ public class SearchConsole {
     private static void displayMovieByActor() {
         System.out.println("Veuillez indiquer le prénom et le nom de l'acteur :");
         String actorName = scanner.nextLine();
-        Set<Film> films = filmService.findByActor(actorName);
+        List<Film> films = filmService.findByActor(actorName);
         if (films.isEmpty()) {
             System.out.println("Aucun film trouvé");
         } else {

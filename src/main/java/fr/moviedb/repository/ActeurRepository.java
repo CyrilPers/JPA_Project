@@ -7,6 +7,7 @@ import fr.moviedb.utils.ConnectionEntityManager;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 
+import java.util.List;
 import java.util.Set;
 
 public class ActeurRepository {
@@ -37,8 +38,8 @@ public class ActeurRepository {
      * @return
      */
 
-    public Set<Acteur> findByMovie(String movieName) {
-        return (Set<Acteur>) em.createQuery(
+    public List<Acteur> findByMovie(String movieName) {
+        return (List<Acteur>) em.createQuery(
                         "SELECT DISTINCT a FROM Acteur a " +
                                 "JOIN a.roles r " +
                                 "JOIN r.films f " +

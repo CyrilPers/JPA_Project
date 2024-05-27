@@ -1,9 +1,9 @@
 package fr.moviedb.services;
 
 import fr.moviedb.entities.Film;
-import fr.moviedb.entities.Pays;
 import fr.moviedb.repository.FilmRepository;
 
+import java.util.List;
 import java.util.Set;
 
 public class FilmService {
@@ -34,7 +34,7 @@ public class FilmService {
         return filmRepository.findByPeriodAndActor(startYear, endYear, actorName);
     }
 
-    public Set<Film> findByActor(String actorName) {
+    public List<Film> findByActor(String actorName) {
         return filmRepository.findByActor(actorName);
     }
     }

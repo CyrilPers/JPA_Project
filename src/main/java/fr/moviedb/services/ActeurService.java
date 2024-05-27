@@ -3,6 +3,7 @@ package fr.moviedb.services;
 import fr.moviedb.entities.Acteur;
 import fr.moviedb.repository.ActeurRepository;
 
+import java.util.List;
 import java.util.Set;
 
 public class ActeurService {
@@ -21,7 +22,7 @@ public class ActeurService {
         return acteurRepository.setRealisateurAsActeur(acteur);
     }
 
-    public Set<Acteur> findByMovie(String movieName) {
+    public List<Acteur> findByMovie(String movieName) {
         return acteurRepository.findByMovie(movieName);
     }
 
