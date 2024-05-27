@@ -14,6 +14,7 @@ public class VilleRepository {
     }
 
     public Ville save(Ville ville) {
+        EntityTransaction transaction = em.getTransaction();
         transaction.begin();
         em.persist(ville);
         transaction.commit();
