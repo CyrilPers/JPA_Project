@@ -1,5 +1,6 @@
 package fr.moviedb.repository;
 
+import fr.moviedb.entities.Langue;
 import fr.moviedb.entities.Realisateur;
 import fr.moviedb.utils.ConnectionEntityManager;
 import jakarta.persistence.EntityManager;
@@ -21,6 +22,14 @@ public class RealisateurRepository {
         transaction.begin();
         em.persist(realisateur);
         transaction.commit();
+        return realisateur;
+    }
+
+    public Realisateur saveActeurAsRealisateur(Realisateur realisateur) {
+        System.out.println(realisateur.getIdPersonne());
+        em.createNativeQuery("INSERT INTO realisateur (id_personne) VALUES (?)")
+                .setParameter(1, realisateur.getIdPersonne())
+                .executeUpdate();
         return realisateur;
     }
 }

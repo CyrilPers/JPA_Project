@@ -10,7 +10,10 @@ import java.util.Set;
 @Table(name="realisateur")
 public class Realisateur extends Personne {
 
-    @ManyToMany(mappedBy = "realisateurs")
+    @ManyToMany
+    @JoinTable(name = "a_realise",
+            joinColumns = @JoinColumn(name = "id_personne"),
+            inverseJoinColumns = @JoinColumn(name = "id_film"))
     private Set<Film> films = new HashSet<>();
 
     public Set<Film> getFilms() {

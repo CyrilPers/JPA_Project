@@ -15,8 +15,8 @@ public class Acteur extends Personne{
 
     @ManyToMany
     @JoinTable(name = "asso_11",
-            inverseJoinColumns = @JoinColumn(name = "id_personne"),
-            joinColumns = @JoinColumn(name = "id_role"))
+            joinColumns = @JoinColumn(name = "id_personne"),
+            inverseJoinColumns = @JoinColumn(name = "id_role"))
     private Set<Role> roles = new HashSet<>();
 
     public BigDecimal getTaille() {

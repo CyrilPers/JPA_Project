@@ -183,6 +183,7 @@ public class ManageFile {
         }
         if (jActeur.containsKey("height")) {
             String numericPart = jActeur.get("height").toString().replace("m", "").trim();
+            System.out.println("taille :" + numericPart);
             acteur.setTaille(new BigDecimal(numericPart));
         }
         if (jActeur.containsKey("naissance")) {
@@ -245,7 +246,12 @@ public class ManageFile {
                             }
                         }
                     }
-                    realisateurService.add(realisateur);
+                    Acteur acteur = acteurService.findById(realisateur.getIdPersonne());
+                    if (acteur != null) {
+                        realisateurService.setActeurAsRealisateur(realisateur);
+                    } else {
+                        realisateurService.add(realisateur);
+                    }
                     realisateurList.add(realisateur);
                 }
             }
