@@ -63,11 +63,14 @@ public class SearchConsole {
 
     private static void displayMovieByPeriodAndActor(boolean addActor) {
         List<Film> films = new ArrayList<>();
-        System.out.println("Veuillez la indiquer la période :");
+        System.out.println("Veuillez indiquer la période :");
         System.out.println("Début de période (année):");
         int startYear = scanner.nextInt();
-        System.out.println("Fin de période (année) ");
+        scanner.nextLine();
+        System.out.println("Fin de période (année) :");
         int endYear = scanner.nextInt();
+        scanner.nextLine();
+
         if (addActor) {
             System.out.println("Nom de l'acteur :");
             String actorName = scanner.nextLine();
@@ -75,7 +78,8 @@ public class SearchConsole {
         } else {
             films = filmService.findByPeriod(startYear, endYear);
         }
-        if (films.size() == 0) {
+
+        if (films.isEmpty()) {
             System.out.println("Aucun film trouvé");
         } else {
             System.out.println("Liste des films :");
@@ -89,7 +93,7 @@ public class SearchConsole {
         String movie1 = scanner.nextLine();
         System.out.println("Film 2: ");
         String movie2 = scanner.nextLine();
-        Set<Acteur> acteurs = acteurService.findSameActorsInMovies(movie1, movie2);
+        List<Acteur> acteurs = acteurService.findSameActorsInMovies(movie1, movie2);
         if (acteurs.isEmpty()) {
             System.out.println("Aucun acteurs trouvés");
         } else {
@@ -103,7 +107,7 @@ public class SearchConsole {
         String actor1 = scanner.nextLine();
         System.out.println("Acteur 2 (prénom et nom) :");
         String actor2 = scanner.nextLine();
-        Set<Film> films = filmService.findByActors(actor1, actor2);
+        List<Film> films = filmService.findByActors(actor1, actor2);
         if (films.isEmpty()) {
             System.out.println("Aucun film trouvé");
         } else {

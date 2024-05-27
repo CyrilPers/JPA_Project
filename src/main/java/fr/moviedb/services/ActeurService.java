@@ -4,7 +4,6 @@ import fr.moviedb.entities.Acteur;
 import fr.moviedb.repository.ActeurRepository;
 
 import java.util.List;
-import java.util.Set;
 
 public class ActeurService {
 
@@ -26,7 +25,7 @@ public class ActeurService {
         return acteurRepository.findByMovie(movieName);
     }
 
-    public Set<Acteur> findSameActorsInMovies(String movieName1, String movieName2) {
+    public List<Acteur> findSameActorsInMovies(String movieName1, String movieName2) {
         return acteurRepository.findSameActorsInMovies(movieName1, movieName2);
     }
 

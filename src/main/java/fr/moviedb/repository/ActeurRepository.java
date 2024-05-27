@@ -46,8 +46,8 @@ public class ActeurRepository {
                 .getResultList();
     }
 
-    public Set<Acteur> findSameActorsInMovies(String movieName1, String movieName2) {
-        return (Set<Acteur>) em.createQuery(
+    public List<Acteur> findSameActorsInMovies(String movieName1, String movieName2) {
+        return (List<Acteur>) em.createQuery(
                         "SELECT a FROM Acteur a " +
                                 "JOIN a.roles r1 " +
                                 "JOIN r1.films f1 " +

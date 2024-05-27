@@ -4,7 +4,6 @@ import fr.moviedb.entities.Film;
 import fr.moviedb.repository.FilmRepository;
 
 import java.util.List;
-import java.util.Set;
 
 public class FilmService {
 
@@ -22,7 +21,7 @@ public class FilmService {
         return filmFound;
     }
 
-    public Set<Film> findByActors(String actorName1, String actorName2) {
+    public List<Film> findByActors(String actorName1, String actorName2) {
         return filmRepository.findByActors(actorName1, actorName2);
     }
 

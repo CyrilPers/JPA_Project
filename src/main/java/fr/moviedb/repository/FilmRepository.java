@@ -26,16 +26,16 @@ public class FilmRepository {
         return em.find(Film.class, id);
     }
 
-    public Set<Film> findByActors(String actorName1, String actorName2) {
-        return (Set<Film>) em.createQuery(
-                        "SELECT f FROM Film f " +
-                                "JOIN AJoue aj1 ON f.id = aj1.film " +
-                                "JOIN AJoue aj2 ON f.id = aj2.film " +
-                                "JOIN Acteur a1 ON aj1.acteur = a1.idPersonne " +
-                                "JOIN Acteur a2 ON aj2.acteur = a2.idPersonne " +
+    public List<Film> findByActors(String actorName1, String actorName2) {
+        return em.createQuery(
+                        "SELECT DISTINCT f FROM Film f " +
+                                "JOIN f.roles r1 " +
+                                "JOIN f.roles r2 " +
+                                "JOIN r1.acteurs a1 " +
+                                "JOIN r2.acteurs a2 " +
                                 "WHERE a1.identite LIKE :identite1 AND a2.identite LIKE :identite2", Film.class)
-                .setParameter("identite1", actorName1)
-                .setParameter("identite2", actorName2)
+                .setParameter("identite1", "%" + actorName1 + "%")
+                .setParameter("identite2", "%" + actorName2 + "%")
                 .getResultList();
     }
 
