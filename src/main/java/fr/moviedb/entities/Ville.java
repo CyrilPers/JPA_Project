@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 @Table(name = "ville")
 public class Ville {
     @Id
-    @Column(name = "ville", nullable = false, length = 50)
+    @Column(name = "ville", nullable = false, length = 100)
     private String nom;
 
     public Ville(String ville) {

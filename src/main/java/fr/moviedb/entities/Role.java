@@ -20,7 +20,10 @@ public class Role {
     @ManyToMany(mappedBy = "roles")
     private Set<Film> films = new HashSet<>();
 
-    @ManyToMany(mappedBy = "roles")
+    @ManyToMany
+    @JoinTable(name = "asso_11",
+            inverseJoinColumns = @JoinColumn(name = "id_personne"),
+            joinColumns = @JoinColumn(name = "id_role"))
     private Set<Acteur> acteurs = new HashSet<>();
 
     public Role() {

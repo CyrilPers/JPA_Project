@@ -23,6 +23,8 @@ public class ConnectionEntityManager {
 
 
     public static void closeEM() {
-        em.close();
+        if (em != null) {
+            em.close();
+        }
     }
 }

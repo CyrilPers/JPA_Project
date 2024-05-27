@@ -17,6 +17,10 @@ public class ActeurService {
         return acteurRepository.save(acteur);
     }
 
+    public Acteur setRealisateurAsActeur(Acteur acteur) {
+        return acteurRepository.setRealisateurAsActeur(acteur);
+    }
+
     public Set<Acteur> findByMovie(String movieName) {
         return acteurRepository.findByMovie(movieName);
     }

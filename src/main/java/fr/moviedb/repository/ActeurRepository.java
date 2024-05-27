@@ -1,6 +1,7 @@
 package fr.moviedb.repository;
 
 import fr.moviedb.entities.Acteur;
+import fr.moviedb.entities.Realisateur;
 import fr.moviedb.entities.Role;
 import fr.moviedb.utils.ConnectionEntityManager;
 import jakarta.persistence.EntityManager;
@@ -57,5 +58,15 @@ public class ActeurRepository {
                 .setParameter("movieName1", movieName1)
                 .setParameter("movieName2", movieName2)
                 .getResultList();
+    }
+
+    public Acteur setRealisateurAsActeur(Acteur acteur) {
+        transaction.begin();
+        System.out.println(acteur.getIdPersonne());
+        em.createNativeQuery("INSERT INTO acteur (id_personne) VALUES (?)")
+                .setParameter(1, acteur.getIdPersonne())
+                .executeUpdate();
+        transaction.commit();
+        return acteur;
     }
 }

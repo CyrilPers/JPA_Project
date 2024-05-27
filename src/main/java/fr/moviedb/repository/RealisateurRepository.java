@@ -26,10 +26,12 @@ public class RealisateurRepository {
     }
 
     public Realisateur saveActeurAsRealisateur(Realisateur realisateur) {
+        transaction.begin();
         System.out.println(realisateur.getIdPersonne());
         em.createNativeQuery("INSERT INTO realisateur (id_personne) VALUES (?)")
                 .setParameter(1, realisateur.getIdPersonne())
                 .executeUpdate();
+        transaction.commit();
         return realisateur;
     }
 }

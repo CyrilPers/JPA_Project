@@ -54,7 +54,10 @@ public class ManageFile {
                 if (jFilm.containsKey("rating") && jFilm.get("rating") != null) {
                     if (!jFilm.get("rating").toString().isBlank()) {
                         System.out.println(jFilm.get("rating").toString());
-                        film.setRating(new BigDecimal(jFilm.get("rating").toString()));
+                        try {
+                            film.setRating(new BigDecimal(jFilm.get("rating").toString()));
+                        } catch (Exception e) {
+                        }
                     }
                 }
                 if (jFilm.containsKey("url") && jFilm.get("url") != null) {
@@ -114,8 +117,8 @@ public class ManageFile {
                 saveFilm = false;
             }
         }
-        ConnectionEntityManager.closeEM();
         System.out.println("COPIE EN BDD TERMINEE !");
+        ConnectionEntityManager.closeEM();
     }
 
     private Set<Role> createRole(JSONArray roles, Film film) throws java.text.ParseException {
@@ -131,6 +134,7 @@ public class ManageFile {
                     acteur = acteurService.findById(jActeur.get("id").toString());
                     if (acteur == null) {
                         acteur = convertActeur(jActeur);
+                        acteurService.add(acteur);
                     }
                 }
             }
@@ -163,8 +167,14 @@ public class ManageFile {
                 if (acteurFound != null) {
                     acteurList.add(acteurFound);
                 } else {
+                    Realisateur realisateur = realisateurService.findById(jActeur.get("id").toString());
                     Acteur acteur = convertActeur(jActeur);
-                    acteurService.add(acteur);
+                    if (realisateur != null) {
+                        acteurService.setRealisateurAsActeur(acteur);
+                    } else {
+                        acteurService.add(acteur);
+
+                    }
                     acteurList.add(acteur);
                 }
             }
@@ -182,16 +192,22 @@ public class ManageFile {
             acteur.setUrl((String) jActeur.get("url"));
         }
         if (jActeur.containsKey("height")) {
-            String numericPart = jActeur.get("height").toString().replace("m", "").trim();
-            System.out.println("taille :" + numericPart);
-            acteur.setTaille(new BigDecimal(numericPart));
+                String numericPart = jActeur.get("height").toString().replace("m", "").trim();
+                System.out.println("taille :" + numericPart);
+            try {
+                acteur.setTaille(new BigDecimal(numericPart));
+            } catch (Exception e) {
+            }
         }
         if (jActeur.containsKey("naissance")) {
             JSONObject naissance = (JSONObject) jActeur.get("naissance");
             if (naissance.containsKey("dateNaissance")) {
                 if (!naissance.get("dateNaissance").toString().isBlank()) {
-                    Date date = convertToDate(naissance.get("dateNaissance").toString());
-                    acteur.setDateNaissance(date);
+                    try {
+                        Date date = convertToDate(naissance.get("dateNaissance").toString());
+                        acteur.setDateNaissance(date);
+                    } catch (java.text.ParseException e) {
+                    }
                 }
             }
             if (naissance.containsKey("lieuNaissance") && naissance.get("lieuNaissance") != null) {
@@ -235,7 +251,6 @@ public class ManageFile {
                                     Date date = convertToDate(naissance.get("dateNaissance").toString());
                                     realisateur.setDateNaissance(date);
                                 } catch (java.text.ParseException e) {
-                                    throw new RuntimeException(e);
                                 }
                             }
                         }
@@ -288,6 +303,7 @@ public class ManageFile {
         } else {
             Ville ville = villeService.add(lieuElements[0]);
             EtatDpt etatDpt = etatDptService.add(lieuElements[1]);
+            System.out.println(lieuElements[2]);
             Pays pays = paysService.add(lieuElements[2]);
             lieu = new Lieu(ville, etatDpt, pays);
         }

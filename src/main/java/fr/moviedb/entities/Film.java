@@ -22,7 +22,7 @@ public class Film {
     @Column(name = "rating", precision = 2, scale = 1)
     private BigDecimal rating;
 
-    @Column(name = "url", length = 50)
+    @Column(name = "url", length = 100)
     private String url;
 
     @Column(name = "resume", length = 500)
