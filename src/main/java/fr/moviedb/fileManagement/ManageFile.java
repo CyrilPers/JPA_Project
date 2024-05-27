@@ -134,7 +134,12 @@ public class ManageFile {
                     acteur = acteurService.findById(jActeur.get("id").toString());
                     if (acteur == null) {
                         acteur = convertActeur(jActeur);
-                        acteurService.add(acteur);
+                        Realisateur realisateur = realisateurService.findById(jActeur.get("id").toString());
+                        if (realisateur == null) {
+                            acteur = acteurService.add(acteur);
+                        } else {
+                            acteur = acteurService.setRealisateurAsActeur(acteur);
+                        }
                     }
                 }
             }
