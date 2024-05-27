@@ -39,8 +39,8 @@ public class FilmRepository {
                 .getResultList();
     }
 
-    public Set<Film> findByPeriod(int startYear, int endYear) {
-        return (Set<Film>) em.createQuery(
+    public List<Film> findByPeriod(int startYear, int endYear) {
+        return (List<Film>) em.createQuery(
                         "SELECT f FROM Film f " +
                                 "WHERE f.annee BETWEEN :year1 AND :year2", Film.class)
                 .setParameter("year1", startYear)
@@ -48,8 +48,8 @@ public class FilmRepository {
                 .getResultList();
     }
 
-    public Set<Film> findByPeriodAndActor(int startYear, int endYear, String actorName) {
-        return (Set<Film>) em.createQuery(
+    public List<Film> findByPeriodAndActor(int startYear, int endYear, String actorName) {
+        return (List<Film>) em.createQuery(
                         "SELECT f FROM Film f " +
                                 "JOIN f.roles r " +
                                 "JOIN r.acteurs a " +

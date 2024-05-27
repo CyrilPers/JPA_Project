@@ -1,8 +1,6 @@
 package fr.moviedb.repository;
 
 import fr.moviedb.entities.Acteur;
-import fr.moviedb.entities.Realisateur;
-import fr.moviedb.entities.Role;
 import fr.moviedb.utils.ConnectionEntityManager;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;

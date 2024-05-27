@@ -26,11 +26,11 @@ public class FilmService {
         return filmRepository.findByActors(actorName1, actorName2);
     }
 
-    public Set<Film> findByPeriod(int startYear, int endYear) {
-        return filmRepository.findByPeriod(startYear, endYear);
+    public List<Film> findByPeriod(int startYear, int endYear) {
+        return (List<Film>) filmRepository.findByPeriod(startYear, endYear);
     }
 
-    public Set<Film> findByPeriodAndActors(int startYear, int endYear, String actorName) {
+    public List<Film> findByPeriodAndActors(int startYear, int endYear, String actorName) {
         return filmRepository.findByPeriodAndActor(startYear, endYear, actorName);
     }
 

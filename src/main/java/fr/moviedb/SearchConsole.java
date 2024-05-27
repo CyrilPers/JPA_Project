@@ -5,10 +5,7 @@ import fr.moviedb.entities.Film;
 import fr.moviedb.services.ActeurService;
 import fr.moviedb.services.FilmService;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 
 public class SearchConsole {
 
@@ -65,7 +62,7 @@ public class SearchConsole {
     }
 
     private static void displayMovieByPeriodAndActor(boolean addActor) {
-        Set<Film> films = new HashSet<>();
+        List<Film> films = new ArrayList<>();
         System.out.println("Veuillez la indiquer la période :");
         System.out.println("Début de période (année):");
         int startYear = scanner.nextInt();
