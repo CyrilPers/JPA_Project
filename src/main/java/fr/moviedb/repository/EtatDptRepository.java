@@ -10,7 +10,11 @@ public class EtatDptRepository {
     private EntityTransaction transaction = em.getTransaction();
 
     public EtatDpt findEtatDptByName(String nom) {
-        return em.find(EtatDpt.class, nom);
+        try {
+            return em.find(EtatDpt.class, nom);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public EtatDpt save(EtatDpt etatDpt) {

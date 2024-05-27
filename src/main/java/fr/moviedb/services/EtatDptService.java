@@ -11,11 +11,11 @@ public class EtatDptService {
 
 
     public EtatDpt add(String nom) {
-        try {
-            return etatDptRepository.findEtatDptByName(nom);
-        } catch (Exception e) {
+        EtatDpt etatDptFound = etatDptRepository.findEtatDptByName(nom);
+        if (etatDptFound == null) {
             EtatDpt etatDpt = new EtatDpt(nom);
             return etatDptRepository.save(etatDpt);
         }
+        return etatDptFound;
     }
 }
